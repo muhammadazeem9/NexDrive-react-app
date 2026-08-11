@@ -1,0 +1,46 @@
+import { FaCheckCircle } from "react-icons/fa";
+import SectionTitle from "../Container/SectionTitle";
+import { features } from "./AboutData";
+import { useNavigate } from "react-router-dom";
+
+const AboutContent = () => {
+  const navigate = useNavigate();
+  return (
+    <div>
+      <SectionTitle subtitle="About Us" title="High Performance Muscle Cars" />
+
+      <p className="text-gray-600 leading-8 mb-8">
+        We provide premium quality muscle cars, genuine spare parts, and
+        professional maintenance services with years of experience in the
+        automotive industry.
+      </p>
+
+      <div className="space-y-4 mb-8">
+        {features.map((item) => (
+          <div key={item} className="flex items-center gap-3">
+            <FaCheckCircle className="text-blue-600" />
+
+            <span>{item}</span>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={() => navigate("/about")}
+        className="
+          bg-blue-600
+          text-white
+          px-6
+          py-3
+          rounded-lg
+          hover:bg-blue-700
+          transition
+        "
+      >
+        Read More
+      </button>
+    </div>
+  );
+};
+
+export default AboutContent;

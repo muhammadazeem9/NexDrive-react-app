@@ -1,0 +1,40 @@
+src
+│
+├── assets
+│   ├── images
+│   └── icons
+│
+├── components
+│   ├── Button
+│   ├── Container
+│   ├── Footer
+│   ├── Gallery
+│   ├── Hero
+│   ├── Navbar
+│   ├── Newsletter
+│   ├── ProductCard
+│   ├── SaleCard
+│   └── SectionTitle
+│
+├── layouts
+│   └── MainLayout.tsx
+│
+├── pages
+│   ├── Home
+│   ├── Products
+│   ├── ProductDetails
+│   ├── About
+│   └── Contact
+│
+├── routes
+│   └── AppRoutes.tsx
+│
+├── data
+├── hooks
+├── services
+├── types
+├── utils
+│
+├── App.tsx
+├── main.tsx
+└── index.css
