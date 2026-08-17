@@ -6,7 +6,7 @@ type FooterColumnProps = {
 const FooterColumn = ({ title, children }: FooterColumnProps) => {
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-5">{title}</h3>
+      <h3 className="mb-5 text-lg font-semibold">{title}</h3>
 
       {children}
     </div>

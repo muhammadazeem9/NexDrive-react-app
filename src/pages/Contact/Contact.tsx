@@ -1,76 +1,151 @@
+import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
+
 const ContactPage = () => {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12">
-      <h1 className="text-4xl font-bold text-center">Contact Us</h1>
-
-      <div className="grid md:grid-cols-2 gap-10 mt-10">
-        <div>
-          <h2 className="text-2xl font-semibold">Get In Touch</h2>
-
-          <p className="mt-4 text-gray-600">
-            Have questions or need help? Feel free to contact us. Our team will
-            be happy to assist you.
+    <main className="min-h-screen bg-[#050d16] py-12 text-white sm:py-16">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center">
+          <p className="text-sm font-medium tracking-[0.2em] text-blue-500 uppercase">
+            Contact Us
           </p>
 
-          <div className="mt-6 space-y-3">
-            <p>📍 Address: Lahore, Pakistan</p>
+          <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Get In Touch</h1>
 
-            <p>📞 Phone: +92 300 1234567</p>
-
-            <p>✉️ Email: support@example.com</p>
-          </div>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-gray-400">
+            Have a question about our products or services? Send us a message
+            and our team will be happy to help.
+          </p>
         </div>
 
-        <form className="space-y-4">
-          <input
-            type="text"
-            placeholder="Your Name"
-            className="
-              w-full
-              border
-              p-3
-              rounded-lg
-            "
-          />
+        {/* Content */}
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+          {/* Contact Information */}
+          <div className="rounded-xl border border-white/10 bg-[#0d1722] p-6 sm:p-8">
+            <p className="text-sm font-medium tracking-wider text-blue-500 uppercase">
+              Contact Information
+            </p>
 
-          <input
-            type="email"
-            placeholder="Your Email"
-            className="
-              w-full
-              border
-              p-3
-              rounded-lg
-            "
-          />
+            <h2 className="mt-2 text-2xl font-semibold">We're Here To Help</h2>
 
-          <textarea
-            placeholder="Your Message"
-            rows={5}
-            className="
-              w-full
-              border
-              p-3
-              rounded-lg
-            "
-          />
+            <p className="mt-4 text-sm leading-6 text-gray-400">
+              Whether you need help choosing a product, have a question about an
+              order, or simply want to learn more about us, feel free to reach
+              out.
+            </p>
 
-          <button
-            type="submit"
-            className="
-              bg-blue-600
-              text-white
-              px-6
-              py-3
-              rounded-lg
-              hover:bg-blue-700
-            "
-          >
-            Send Message
-          </button>
-        </form>
+            <div className="mt-8 space-y-5">
+              {/* Address */}
+              <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-600/10">
+                  <FaMapMarkerAlt className="text-blue-500" />
+                </div>
+
+                <div>
+                  <p className="text-sm text-gray-500">Address</p>
+                  <p className="mt-1 text-sm font-medium text-gray-200">
+                    Lahore, Pakistan
+                  </p>
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-600/10">
+                  <FaPhoneAlt className="text-blue-500" />
+                </div>
+
+                <div>
+                  <p className="text-sm text-gray-500">Phone</p>
+
+                  <a
+                    href="tel:+923001234567"
+                    className="mt-1 block text-sm font-medium text-gray-200 transition hover:text-blue-500"
+                  >
+                    +92 300 1234567
+                  </a>
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-600/10">
+                  <FaEnvelope className="text-blue-500" />
+                </div>
+
+                <div>
+                  <p className="text-sm text-gray-500">Email</p>
+
+                  <a
+                    href="mailto:support@example.com"
+                    className="mt-1 block text-sm font-medium text-gray-200 transition hover:text-blue-500"
+                  >
+                    support@example.com
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className="rounded-xl border border-white/10 bg-[#0d1722] p-6 sm:p-8">
+            <p className="text-sm font-medium tracking-wider text-blue-500 uppercase">
+              Send a Message
+            </p>
+
+            <h2 className="mt-2 text-2xl font-semibold">How Can We Help?</h2>
+
+            <form className="mt-7 space-y-5">
+              {/* Name */}
+              <div>
+                <label className="mb-2 block text-sm text-gray-400">
+                  Your Name
+                </label>
+
+                <input
+                  type="text"
+                  placeholder="Enter your name"
+                  className="w-full rounded-lg border border-white/10 bg-[#09131e] px-4 py-3 text-sm text-white transition outline-none placeholder:text-gray-600 focus:border-blue-500"
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="mb-2 block text-sm text-gray-400">
+                  Your Email
+                </label>
+
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full rounded-lg border border-white/10 bg-[#09131e] px-4 py-3 text-sm text-white transition outline-none placeholder:text-gray-600 focus:border-blue-500"
+                />
+              </div>
+
+              {/* Message */}
+              <div>
+                <label className="mb-2 block text-sm text-gray-400">
+                  Your Message
+                </label>
+
+                <textarea
+                  placeholder="How can we help you?"
+                  rows={5}
+                  className="w-full resize-none rounded-lg border border-white/10 bg-[#09131e] px-4 py-3 text-sm text-white transition outline-none placeholder:text-gray-600 focus:border-blue-500"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700"
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 

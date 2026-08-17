@@ -35,18 +35,8 @@ const FilterSidebar = ({
   };
 
   return (
-    <aside
-      className="
-        rounded-xl
-        border
-        p-6
-        bg-white
-        shadow-sm
-        sticky
-        top-24
-      "
-    >
-      <h2 className="text-2xl font-bold mb-6">Filters</h2>
+    <aside className="sticky top-24 rounded-xl border p-6 shadow-sm">
+      <h2 className="mb-6 text-2xl font-bold">Filters</h2>
 
       <CategoryFilter value={category} onChange={setCategory} />
 
@@ -58,16 +48,7 @@ const FilterSidebar = ({
 
       <button
         onClick={handleResetFilters}
-        className="
-          mt-8
-          w-full
-          rounded-lg
-          bg-red-500
-          py-3
-          text-white
-          hover:bg-red-600
-          transition
-        "
+        className="mt-8 w-full rounded-lg bg-red-500 py-3 text-white transition hover:bg-red-600"
       >
         Reset Filters
       </button>

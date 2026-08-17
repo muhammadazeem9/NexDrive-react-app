@@ -4,8 +4,8 @@ const NotFound: React.FC = () => {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-6 py-12 text-white">
       {/* Background effects */}
-      <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
-      <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-purple-500/20 blur-3xl" />
+      <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
+      <div className="absolute -right-40 -bottom-40 h-96 w-96 rounded-full bg-purple-500/20 blur-3xl" />
 
       {/* Grid background */}
       <div
@@ -22,7 +22,7 @@ const NotFound: React.FC = () => {
       {/* Content */}
       <section className="relative z-10 w-full max-w-2xl text-center">
         {/* 404 */}
-        <div className="select-none bg-gradient-to-br from-white via-indigo-300 to-purple-400 bg-clip-text text-[10rem] font-black leading-none tracking-tighter text-transparent sm:text-[13rem]">
+        <div className="bg-gradient-to-br from-white via-indigo-300 to-purple-400 bg-clip-text text-[10rem] leading-none font-black tracking-tighter text-transparent select-none sm:text-[13rem]">
           404
         </div>
 

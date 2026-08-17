@@ -10,13 +10,13 @@ type Props = {
 const RatingFilter = ({ value, onChange }: Props) => {
   return (
     <div className="py-6">
-      <h3 className="text-lg font-semibold mb-4">Rating</h3>
+      <h3 className="mb-4 text-lg font-semibold">Rating</h3>
 
       <div className="space-y-3">
         {ratings.map((rating) => (
           <label
             key={rating}
-            className="flex items-center gap-3 cursor-pointer"
+            className="flex cursor-pointer items-center gap-3"
           >
             <input
               type="radio"

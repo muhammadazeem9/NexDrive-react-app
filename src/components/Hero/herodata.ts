@@ -1,8 +1,8 @@
 export const heroSlides = [
-  { id: 1, image: "/images/hero/hero.jpg", alt: "range rover white" },
-  { id: 2, image: "/images/hero/hero1.jpg", alt: "range rover black" },
-  { id: 3, image: "/images/hero/hero2.jpg", alt: "odi" },
-  { id: 4, image: "/images/hero/hero3.jpg", alt: "range over" },
+  { id: 1, image: "/images/hero/hero-copy.png", alt: "range rover white" },
+  { id: 2, image: "/images/hero/hero1.png", alt: "range rover black" },
+  { id: 3, image: "/images/hero/hero2.png", alt: "odi" },
+  { id: 4, image: "/images/hero/hero3.png", alt: "range over" },
 ];
 
 export const timeTable = [

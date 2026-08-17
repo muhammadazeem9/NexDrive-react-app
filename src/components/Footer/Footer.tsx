@@ -8,7 +8,7 @@ import { quickLinks, services, contactInfo } from "./footerData";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 pt-16">
+    <footer className="bg-gray-900 pt-16 text-gray-300">
       <Container>
         <div className="grid gap-10 md:grid-cols-4 lg:grid-cols-4">
           {/* Company */}
@@ -59,16 +59,7 @@ const Footer = () => {
           </FooterColumn>
         </div>
 
-        <div
-          className="
-            border-t
-            border-gray-700
-            mt-12
-            py-6
-            text-center
-            text-sm
-          "
-        >
+        <div className="mt-12 border-t border-gray-700 py-6 text-center text-sm">
           © 2026 NexDrive Muscle Store. All rights reserved.
         </div>
       </Container>

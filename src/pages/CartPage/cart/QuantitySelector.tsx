@@ -16,57 +16,23 @@ const QuantitySelector = ({
   max = 99,
 }: QuantitySelectorProps) => {
   return (
-    <div
-      className="
-      flex
-      items-center
-      border
-      rounded-xl
-      overflow-hidden
-      w-fit
-      bg-white
-    "
-    >
+    <div className="flex w-fit items-center overflow-hidden rounded-xl border">
       <button
         type="button"
         onClick={onDecrease}
         disabled={quantity <= min}
-        className="
-          w-10
-          h-10
-          flex
-          items-center
-          justify-center
-          hover:bg-gray-100
-          disabled:opacity-40
-        "
+        className="flex h-10 w-10 items-center justify-center hover:bg-gray-100 disabled:opacity-40"
       >
         <FiMinus size={16} />
       </button>
 
-      <span
-        className="
-        w-12
-        text-center
-        font-semibold
-      "
-      >
-        {quantity}
-      </span>
+      <span className="w-12 text-center font-semibold">{quantity}</span>
 
       <button
         type="button"
         onClick={onIncrease}
         disabled={quantity >= max}
-        className="
-          w-10
-          h-10
-          flex
-          items-center
-          justify-center
-          hover:bg-gray-100
-          disabled:opacity-40
-        "
+        className="flex h-10 w-10 items-center justify-center hover:bg-gray-100 disabled:opacity-40"
       >
         <FiPlus size={16} />
       </button>

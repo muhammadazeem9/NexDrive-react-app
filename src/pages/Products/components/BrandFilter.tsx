@@ -14,11 +14,11 @@ const BrandFilter = ({ value, onChange }: Props) => {
 
   return (
     <div className="border-b py-6">
-      <h3 className="text-lg font-semibold mb-4">Brands</h3>
+      <h3 className="mb-4 text-lg font-semibold">Brands</h3>
 
       <div className="space-y-3">
         {brands.map((brand) => (
-          <label key={brand} className="flex items-center gap-3 cursor-pointer">
+          <label key={brand} className="flex cursor-pointer items-center gap-3">
             <input
               type="checkbox"
               className="h-4 w-4"

@@ -1,77 +1,55 @@
 import { Link } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import ProductRating from "./ProductRating";
 import type { Product } from "../../data/Products";
-import { useCart } from "../../context/CartContext";
 
 type ProductCardProps = {
   product: Product;
 };
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const { addToCart } = useCart();
-
   return (
-    <div
-      className="
-      bg-white
-      rounded-xl
-      shadow-md
-      overflow-hidden
-      hover:shadow-xl
-      transition-all
-      duration-300
-      group
-    "
+    <Link
+      to={`/products/${product.id}`}
+      className="group block overflow-hidden rounded-xl border border-white/10 bg-[#101923] shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-blue-500/10"
     >
-      <Link to={`/products/${product.id}`}>
-        <div className="overflow-hidden">
-          <img
-            src={product.image}
-            alt={product.title}
-            className="
-          h-60
-          w-full
-          object-cover
-          group-hover:scale-105
-          duration-500
-        "
-          />
+      {/* Image */}
+      <div className="relative aspect-[1.35/1] overflow-hidden">
+        <img
+          src={product.image}
+          alt={product.title}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+
+        {/* Dark gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#101923] via-transparent to-transparent opacity-80" />
+
+        {/* Wishlist */}
+        <button
+          type="button"
+          onClick={(e) => e.preventDefault()}
+          className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition hover:bg-blue-600 hover:text-white"
+          aria-label="Add to wishlist"
+        >
+          <FaHeart className="text-sm" />
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="px-4 pt-3 pb-4">
+        <h3 className="truncate text-base font-semibold text-white transition-colors group-hover:text-blue-400">
+          {product.title}
+        </h3>
+
+        <div className="mt-2">
+          <ProductRating rating={product.rating} />
         </div>
 
-        <div className="p-5">
-          <h3 className="text-xl font-semibold">{product.title}</h3>
-
-          <div className="my-3">
-            <ProductRating rating={product.rating} />
-          </div>
-
-          <p className="text-blue-600 text-2xl font-bold">
-            ${product.price.toLocaleString()}
-          </p>
-        </div>
-      </Link>
-      <button
-        onClick={() => addToCart(product)}
-        className="
-          mt-5
-          w-full
-          bg-blue-600
-          text-white
-          py-3
-          rounded-lg
-          flex
-          items-center
-          justify-center
-          gap-2
-          hover:bg-blue-700
-          transition
-        "
-      >
-        <FaShoppingCart />
-        Add To Cart
-      </button>
-    </div>
+        <p className="mt-2 text-lg font-bold text-blue-500">
+          ${product.price.toLocaleString()}
+        </p>
+      </div>
+    </Link>
   );
 };
 

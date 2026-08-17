@@ -8,13 +8,13 @@ type Props = {
 const PriceFilter = ({ value, onChange }: Props) => {
   return (
     <div className="border-b py-6">
-      <h3 className="text-lg font-semibold mb-4">Price Range</h3>
+      <h3 className="mb-4 text-lg font-semibold">Price Range</h3>
 
       <div className="space-y-3">
         {priceRange.map((price) => (
           <label
             key={price.label}
-            className="flex items-center gap-3 cursor-pointer"
+            className="flex cursor-pointer items-center gap-3"
           >
             <input
               type="radio"

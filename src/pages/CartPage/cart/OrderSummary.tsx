@@ -10,18 +10,8 @@ const OrderSummary = ({ subtotal }: Props) => {
   const total = subtotal + shipping;
 
   return (
-    <div
-      className="
-      bg-white
-      border
-      rounded-2xl
-      p-6
-      h-fit
-      sticky
-      top-5
-    "
-    >
-      <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
+    <div className="sticky top-5 h-fit rounded-2xl border p-6">
+      <h2 className="mb-6 text-2xl font-bold">Order Summary</h2>
 
       <div className="space-y-4">
         <div className="flex justify-between">
@@ -36,14 +26,7 @@ const OrderSummary = ({ subtotal }: Props) => {
 
         <hr />
 
-        <div
-          className="
-          flex
-          justify-between
-          text-xl
-          font-bold
-        "
-        >
+        <div className="flex justify-between text-xl font-bold">
           <span>Total</span>
           <span>${total.toFixed(2)}</span>
         </div>
@@ -51,16 +34,7 @@ const OrderSummary = ({ subtotal }: Props) => {
         <Link to="/checkout">
           <button
             onClick={() => navigate("checkout")}
-            className="
-              w-full
-              mt-5
-              bg-black
-              text-white
-              rounded-xl
-              py-3
-              hover:bg-gray-800
-              transition
-            "
+            className="mt-5 w-full rounded-xl bg-black py-3 text-white transition hover:bg-gray-800"
           >
             Checkout
           </button>

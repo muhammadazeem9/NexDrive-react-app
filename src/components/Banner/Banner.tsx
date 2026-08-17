@@ -19,13 +19,13 @@ const Banner = () => {
         <div className="relative z-10 flex h-full items-center px-5 sm:px-8 md:px-12 lg:px-16">
           <div className="max-w-3xl">
             {/* Badge */}
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-md sm:text-xs">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-semibold tracking-[0.25em] text-white uppercase backdrop-blur-md sm:text-xs">
               <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_12px_#60a5fa]" />
               Premium Collection
             </span>
 
             {/* Heading */}
-            <h1 className="mt-5 text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="mt-5 text-4xl leading-[1.05] font-black tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
               Drive Beyond
               <span className="block text-blue-400">Ordinary.</span>
             </h1>
@@ -39,7 +39,7 @@ const Banner = () => {
         </div>
 
         {/* Decorative line */}
-        <div className="absolute bottom-6 left-5 right-5 h-px bg-gradient-to-r from-white/40 via-white/10 to-transparent sm:left-8 sm:right-8 md:left-12 md:right-12 lg:left-16 lg:right-16" />
+        <div className="absolute right-5 bottom-6 left-5 h-px bg-gradient-to-r from-white/40 via-white/10 to-transparent sm:right-8 sm:left-8 md:right-12 md:left-12 lg:right-16 lg:left-16" />
       </div>
     </section>
   );

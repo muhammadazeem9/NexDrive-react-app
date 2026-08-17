@@ -10,17 +10,7 @@ type Props = {
 
 const ProductToolbar = ({ search, onChange, sort, setSort }: Props) => {
   return (
-    <div
-      className="
-      mb-8
-      flex
-      flex-col
-      gap-2
-      md:flex-row
-      md:items-center
-      md:justify-between
-    "
-    >
+    <div className="mb-8 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
       <SearchInput value={search} onChange={onChange} />
 
       <SortSelect value={sort} onChange={setSort} />

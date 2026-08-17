@@ -7,12 +7,12 @@ const SaleSection = () => {
     <section className="py-20">
       <Container>
         <div className="mb-10">
-          <p className="text-blue-600 font-semibold uppercase">Promotions</p>
+          <p className="font-semibold text-blue-600 uppercase">Promotions</p>
 
-          <h2 className="text-4xl font-bold">Year End Sale</h2>
+          <h2 className="text-4xl font-bold">Special Offers Just For You</h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid gap-8 md:grid-cols-2">
           {saleItems.map((item) => (
             <SaleCard key={item.id} item={item} />
           ))}

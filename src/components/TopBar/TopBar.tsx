@@ -3,21 +3,24 @@ import Container from "../Container/Container";
 
 function TopBar() {
   return (
-    <div className="h-14 pt-3 bg-linear-to-r from-sky-500 to-indigo-500 text-white">
+    <div className="min-h-10 bg-gradient-to-r from-[#06152d] via-[#08295a] to-[#0759d8] text-white">
       <Container>
-        <div className="flex flex-col items-center justify-between gap-3 py-2 text-sm md:flex-row md:gap-0">
-          <p className="text-center md:text-left">
-            Talk to the experts! Call +94 70 765 0485
+        <div className="flex flex-col items-center justify-center gap-2 py-2 text-xs sm:flex-row sm:justify-between sm:text-sm">
+          <p className="text-center sm:text-left">
+            Need help?{" "}
+            <a href="tel:+94707650485" className="hover:text-gray-200">
+              +94 70 765 0485
+            </a>
           </p>
 
-          <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-6">
-            <button className="flex items-center gap-1 transition hover:text-gray-200">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
+            <button className="flex items-center gap-1 whitespace-nowrap transition hover:text-gray-200">
               <BiWorld className="text-lg" />
-              <span>Island Wide Delivery Available</span>
+              <span>Islandwide Delivery</span>
             </button>
 
-            <button className="transition hover:text-gray-200">
-              Help Center
+            <button className="whitespace-nowrap transition hover:text-gray-200">
+              Support Center
             </button>
           </div>
         </div>

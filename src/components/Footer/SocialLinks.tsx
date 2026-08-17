@@ -21,11 +21,11 @@ const socialLinks = [
 
 const SocialLinks = () => {
   return (
-    <div className="flex gap-4 mt-6">
+    <div className="mt-6 flex gap-4">
       {socialLinks.map(({ icon: Icon, hover }, index) => (
         <button
           key={index}
-          className={`w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center transition-all duration-300 ${hover}`}
+          className={`flex h-10 w-10 items-center justify-center rounded-full bg-gray-800 text-white transition-all duration-300 ${hover}`}
         >
           <Icon className="text-lg" />
         </button>

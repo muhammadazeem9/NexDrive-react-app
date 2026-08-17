@@ -10,14 +10,7 @@ const ProductSection = () => {
       <Container>
         <SectionTitle subtitle="Products" title="Featured Products" />
 
-        <div
-          className="mt-6
-          grid
-          gap-8
-          sm:grid-cols-2
-          lg:grid-cols-4
-        "
-        >
+        <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {Products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

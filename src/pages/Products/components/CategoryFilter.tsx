@@ -17,13 +17,13 @@ const CategoryFilter = ({ value, onChange }: CategoryFilterProps) => {
 
   return (
     <div className="border-b pb-6">
-      <h3 className="text-lg font-semibold mb-4">Categories</h3>
+      <h3 className="mb-4 text-lg font-semibold">Categories</h3>
 
       <div className="space-y-3">
         {categories.map((category) => (
           <label
             key={category}
-            className="flex items-center gap-3 cursor-pointer"
+            className="flex cursor-pointer items-center gap-3"
           >
             <input
               type="checkbox"

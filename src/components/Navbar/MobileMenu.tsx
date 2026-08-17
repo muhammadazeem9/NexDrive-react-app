@@ -10,7 +10,7 @@ type MobileMenuProps = {
 const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   return (
     <div
-      className={`fixed top-0 right-0 h-screen w-72 bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+      className={`fixed top-0 right-0 z-50 h-screen w-72 transform bg-gradient-to-r from-[#06152d] via-[#08295a] to-[#0c4292] text-white shadow-lg transition-transform duration-300 ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
