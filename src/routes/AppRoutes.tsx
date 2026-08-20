@@ -11,6 +11,7 @@ import ProductDetails from "../pages/productDetails/ProductDetails";
 import CartPage from "../pages/CartPage/Cartpage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import Auth from "../pages/Auth/Auth";
+import Dashboard  from "../pages/Dashboard/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -51,5 +52,9 @@ export const router = createBrowserRouter([
         element: <Auth />,
       },
     ],
+  },
+  {
+    path:"/dashboard",
+    element: <Dashboard />,
   },
 ]);
