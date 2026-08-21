@@ -1,14 +1,12 @@
 import { useState } from "react";
-import DashboardTopbar from "../components/dashboard/DashboardTopbar";
-import DashboardSidebar from "../components/dashboard/DashboardSidebar";
+import DashboardTopbar from "../components/dashboard/dashboard/DashboardTopbar";
+import DashboardSidebar from "../components/dashboard/dashboard/DashboardSidebar";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-const DashboardLayout = ({
-  children,
-}: DashboardLayoutProps) => {
+const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -20,9 +18,7 @@ const DashboardLayout = ({
         />
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <DashboardTopbar
-            onMenuClick={() => setSidebarOpen(true)}
-          />
+          <DashboardTopbar onMenuClick={() => setSidebarOpen(true)} />
 
           <main className="flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8">
             {children}

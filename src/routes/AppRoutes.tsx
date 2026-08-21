@@ -11,7 +11,10 @@ import ProductDetails from "../pages/productDetails/ProductDetails";
 import CartPage from "../pages/CartPage/Cartpage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import Auth from "../pages/Auth/Auth";
-import Dashboard  from "../pages/Dashboard/Dashboard";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import Vehicles from "../pages/Dashboard/Vehicles";
+import Bookings from "../pages/Dashboard/Bookings";
+import BookingDetails from "../pages/Dashboard/BookingDetailPage";
 
 export const router = createBrowserRouter([
   {
@@ -54,7 +57,19 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path:"/dashboard",
+    path: "/dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "/dashboard/vehicles",
+    element: <Vehicles />,
+  },
+  {
+    path: "/dashboard/bookings",
+    element: <Bookings />,
+  },
+  {
+    path: "dashboard/bookings/:bookingId",
+    element: <BookingDetails />,
   },
 ]);

@@ -1,10 +1,10 @@
 import DashboardLayout from "../../layouts/DashboardLayout";
-import StatCard from "../../components/dashboard/StatCard";
+import StatCard from "../../components/dashboard/dashboard/StatCard";
 import { dashboardStats } from "../../data/dashboard";
 import { popularVehicles } from "../../data/dashboard";
-import RevenueChart from "../../components/dashboard/RevenuCharts";
-import PopularVehicleCard from "../../components/dashboard/PopularVehicleCard";
-import RecentBookings from "../../components/dashboard/RecentBooking";
+import RevenueChart from "../../components/dashboard/dashboard/RevenuCharts";
+import PopularVehicleCard from "../../components/dashboard/dashboard/PopularVehicleCard";
+import RecentBookings from "../../components/dashboard/dashboard/RecentBooking";
 
 const Dashboard = () => {
   return (
