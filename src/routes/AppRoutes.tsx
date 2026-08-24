@@ -15,6 +15,10 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Vehicles from "../pages/Dashboard/Vehicles";
 import Bookings from "../pages/Dashboard/Bookings";
 import BookingDetails from "../pages/Dashboard/BookingDetailPage";
+import Customer from "../pages/Dashboard/Customer";
+import CustomerDetails from "../pages/Dashboard/CustomerDetails";
+import Payments from "../pages/Dashboard/Payments";
+import Reviews from "../pages/Dashboard/Reviews";
 
 export const router = createBrowserRouter([
   {
@@ -71,5 +75,21 @@ export const router = createBrowserRouter([
   {
     path: "dashboard/bookings/:bookingId",
     element: <BookingDetails />,
+  },
+  {
+    path: "dashboard/customers",
+    element: <Customer />,
+  },
+  {
+    path: "dashboard/customers/:customerId",
+    element: <CustomerDetails />,
+  },
+  {
+    path: "dashboard/payments",
+    element: <Payments />,
+  },
+  {
+    path: "dashboard/reviews",
+    element: <Reviews />,
   },
 ]);
