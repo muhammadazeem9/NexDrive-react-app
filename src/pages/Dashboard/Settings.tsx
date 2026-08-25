@@ -9,7 +9,6 @@ import {
 } from "react-icons/md";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
-import { payments } from "../../data/payment";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("profile");
