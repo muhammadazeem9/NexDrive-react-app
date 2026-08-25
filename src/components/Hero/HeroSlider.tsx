@@ -1,6 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { heroSlides } from "./herodata";
+import { Link } from "react-router-dom";
 
 const HeroSlider = () => {
   return (
@@ -45,10 +46,12 @@ const HeroSlider = () => {
                 </p>
 
                 {/* CTA */}
-                <button className="mt-6 rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition duration-300 hover:bg-blue-500 hover:shadow-blue-500/30 sm:mt-7 sm:px-6">
-                  Explore Collection
-                  <span className="ml-2">→</span>
-                </button>
+                <Link to="/products">
+                  <button className="mt-6 cursor-pointer rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition duration-300 hover:bg-blue-500 hover:shadow-blue-500/30 sm:mt-7 sm:px-6">
+                    Explore Collection
+                    <span className="ml-2">→</span>
+                  </button>
+                </Link>
               </div>
 
               {/* Car Image */}

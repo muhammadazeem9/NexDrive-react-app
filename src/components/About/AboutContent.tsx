@@ -27,7 +27,7 @@ const AboutContent = () => {
 
       <button
         onClick={() => navigate("/about")}
-        className="rounded-lg bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700"
+        className="cursor-pointer rounded-lg bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700"
       >
         Read More
       </button>
