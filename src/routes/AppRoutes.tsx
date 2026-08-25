@@ -19,6 +19,8 @@ import Customer from "../pages/Dashboard/Customer";
 import CustomerDetails from "../pages/Dashboard/CustomerDetails";
 import Payments from "../pages/Dashboard/Payments";
 import Reviews from "../pages/Dashboard/Reviews";
+import Analytics from "../pages/Dashboard/Analytics";
+import Settings from "../pages/Dashboard/Settings";
 
 export const router = createBrowserRouter([
   {
@@ -60,6 +62,7 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  // Admin dashboard routes
   {
     path: "/dashboard",
     element: <Dashboard />,
@@ -91,5 +94,13 @@ export const router = createBrowserRouter([
   {
     path: "dashboard/reviews",
     element: <Reviews />,
+  },
+  {
+    path: "dashboard/analytics",
+    element: <Analytics />,
+  },
+  {
+    path: "dashboard/settings",
+    element: <Settings />,
   },
 ]);

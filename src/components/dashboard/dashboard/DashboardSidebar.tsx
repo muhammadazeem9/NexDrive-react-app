@@ -48,7 +48,7 @@ const managementLinks = [
   {
     label: "Analytics",
     icon: MdBarChart,
-    path: "/dashboard/anayltics",
+    path: "/dashboard/analytics",
   },
 ];
 
