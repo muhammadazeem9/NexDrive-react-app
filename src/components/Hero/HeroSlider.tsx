@@ -19,7 +19,7 @@ const HeroSlider = () => {
     >
       {heroSlides.map((slide) => (
         <SwiperSlide key={slide.id}>
-          <div className="relative min-h-[520px] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#07111f] via-[#0b1b30] to-[#06152d]">
+          <div className="relative min-h-[520px] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] transition-colors duration-300">
             {/* Background Glow */}
             <div className="absolute top-1/2 -right-20 h-72 w-72 -translate-y-1/2 rounded-full bg-blue-600/20 blur-3xl sm:h-96 sm:w-96" />
 
@@ -28,26 +28,29 @@ const HeroSlider = () => {
               {/* Text Content */}
               <div className="relative z-20 w-full max-w-xl lg:w-[48%]">
                 {/* Label */}
-                <p className="mb-3 text-[10px] font-semibold tracking-[0.25em] text-blue-400 uppercase sm:text-xs">
+                <p className="mb-3 text-[10px] font-semibold tracking-[0.25em] text-blue-500 uppercase sm:text-xs">
                   Premium Performance
                 </p>
 
                 {/* Heading */}
-                <h1 className="text-3xl leading-[1.1] font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
+                <h1 className="text-3xl leading-[1.1] font-bold tracking-tight text-[var(--foreground)] sm:text-4xl md:text-5xl">
                   Built for <span className="text-blue-500">Speed.</span>
                   <br />
                   Driven by Passion.
                 </h1>
 
                 {/* Description */}
-                <p className="mt-4 max-w-md text-sm leading-6 text-gray-400 sm:mt-5 sm:text-base">
+                <p className="mt-4 max-w-md text-sm leading-6 text-[var(--muted)] sm:mt-5 sm:text-base">
                   High performance muscle cars crafted for power, precision and
                   pure automotive performance.
                 </p>
 
                 {/* CTA */}
                 <Link to="/products">
-                  <button className="mt-6 cursor-pointer rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition duration-300 hover:bg-blue-500 hover:shadow-blue-500/30 sm:mt-7 sm:px-6">
+                  <button
+                    type="button"
+                    className="mt-6 cursor-pointer rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition duration-300 hover:bg-blue-500 hover:shadow-blue-500/30 sm:mt-7 sm:px-6"
+                  >
                     Explore Collection
                     <span className="ml-2">→</span>
                   </button>
@@ -65,7 +68,7 @@ const HeroSlider = () => {
             </div>
 
             {/* Bottom Gradient */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/20 to-transparent dark:from-black/40" />
           </div>
         </SwiperSlide>
       ))}

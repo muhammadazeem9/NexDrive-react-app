@@ -3,14 +3,14 @@ import { FiChevronRight } from "react-icons/fi";
 
 const Breadcrumb = () => {
   return (
-    <div className="flex items-center gap-2 text-sm text-gray-500">
-      <Link to="/" className="hover:text-blue-600">
+    <div className="flex items-center gap-2 text-sm text-[var(--muted)]">
+      <Link to="/" className="transition-colors hover:text-blue-500">
         Home
       </Link>
 
-      <FiChevronRight />
+      <FiChevronRight className="text-[var(--muted)]" />
 
-      <span className="font-medium text-gray-800">Products</span>
+      <span className="font-medium text-[var(--foreground)]">Products</span>
     </div>
   );
 };

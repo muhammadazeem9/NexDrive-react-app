@@ -35,8 +35,10 @@ const FilterSidebar = ({
   };
 
   return (
-    <aside className="sticky top-24 rounded-xl border p-6 shadow-sm">
-      <h2 className="mb-6 text-2xl font-bold">Filters</h2>
+    <aside className="sticky top-24 rounded-xl border border-[var(--border)] p-6 text-[var(--foreground)] shadow-sm transition-colors duration-300">
+      <h2 className="mb-6 text-2xl font-bold text-[var(--foreground)]">
+        Filters
+      </h2>
 
       <CategoryFilter value={category} onChange={setCategory} />
 
@@ -47,6 +49,7 @@ const FilterSidebar = ({
       <RatingFilter value={rating} onChange={setRating} />
 
       <button
+        type="button"
         onClick={handleResetFilters}
         className="mt-8 w-full rounded-lg bg-red-500 py-3 text-white transition hover:bg-red-600"
       >

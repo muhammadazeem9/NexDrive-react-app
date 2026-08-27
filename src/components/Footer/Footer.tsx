@@ -8,13 +8,14 @@ import { quickLinks, services, contactInfo } from "./footerData";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 pt-16 text-gray-300">
+    <footer className="bg-[var(--card)] pt-16 text-[var(--muted)] transition-colors duration-300">
       <Container>
         <div className="grid gap-10 md:grid-cols-4 lg:grid-cols-4">
           {/* Company */}
-
           <div>
-            <h2 className="text-3xl font-bold text-white">NexDrive</h2>
+            <h2 className="text-3xl font-bold text-[var(--foreground)]">
+              NexDrive
+            </h2>
 
             <p className="mt-5 leading-7">
               Premium muscle cars, genuine spare parts, and expert maintenance
@@ -25,12 +26,14 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-
           <FooterColumn title="Quick Links">
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <Link to={link.path} className="hover:text-white">
+                  <Link
+                    to={link.path}
+                    className="transition-colors hover:text-blue-500"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -39,7 +42,6 @@ const Footer = () => {
           </FooterColumn>
 
           {/* Services */}
-
           <FooterColumn title="Services">
             <ul className="space-y-3">
               {services.map((service) => (
@@ -49,7 +51,6 @@ const Footer = () => {
           </FooterColumn>
 
           {/* Contact */}
-
           <FooterColumn title="Contact">
             <ul className="space-y-3">
               {contactInfo.map((item) => (
@@ -59,7 +60,8 @@ const Footer = () => {
           </FooterColumn>
         </div>
 
-        <div className="mt-12 border-t border-gray-700 py-6 text-center text-sm">
+        {/* Copyright */}
+        <div className="mt-12 border-t border-[var(--border)] py-6 text-center text-sm">
           © 2026 NexDrive Muscle Store. All rights reserved.
         </div>
       </Container>

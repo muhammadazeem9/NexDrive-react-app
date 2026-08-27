@@ -34,6 +34,7 @@ const mainLinks = [
     path: "/dashboard/customers",
   },
 ];
+
 const managementLinks = [
   {
     label: "Payments",
@@ -58,27 +59,30 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={onClose}
         />
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-50 flex h-screen w-72 flex-col border-r border-white/10 bg-[#07111f] px-5 py-6 transition-transform duration-300 lg:static lg:z-auto lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"} `}
+        className={`fixed top-0 left-0 z-50 flex h-screen w-72 flex-col border-r border-[var(--border)] bg-[var(--background)] px-5 py-6 transition-all duration-300 lg:static lg:z-auto lg:translate-x-0 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         {/* Logo */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">
               NEX<span className="text-sky-400">DRIVE</span>
             </h1>
 
-            <p className="mt-1 text-xs text-slate-500">Admin Dashboard</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">Admin Dashboard</p>
           </div>
 
           <button
+            type="button"
             onClick={onClose}
-            className="rounded-lg p-2 text-slate-400 hover:bg-white/5 hover:text-white lg:hidden"
+            className="rounded-lg p-2 text-[var(--muted)] transition hover:bg-[var(--card)] hover:text-[var(--foreground)] lg:hidden"
           >
             <MdClose size={20} />
           </button>
@@ -88,10 +92,11 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
         <nav className="mt-10 flex-1 space-y-8">
           {/* Main */}
           <div>
-            <p className="mb-3 px-3 text-xs font-semibold tracking-wider text-slate-500 uppercase">
+            <p className="mb-3 px-3 text-xs font-semibold tracking-wider text-[var(--muted)] uppercase">
               Main
             </p>
 
+            {/* Dashboard */}
             <NavLink
               to="/dashboard"
               end
@@ -100,7 +105,7 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
                 `flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${
                   isActive
                     ? "bg-sky-500/10 text-sky-400"
-                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                    : "text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--foreground)]"
                 }`
               }
             >
@@ -108,6 +113,7 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
               <span>Dashboard</span>
             </NavLink>
 
+            {/* Main Links */}
             <div className="space-y-1">
               {mainLinks.map((link) => {
                 const Icon = link.icon;
@@ -121,12 +127,11 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
                       `flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${
                         isActive
                           ? "bg-sky-500/10 text-sky-400"
-                          : "text-slate-400 hover:bg-white/5 hover:text-white"
-                      } `
+                          : "text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--foreground)]"
+                      }`
                     }
                   >
                     <Icon size={19} />
-
                     <span>{link.label}</span>
                   </NavLink>
                 );
@@ -136,7 +141,7 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
 
           {/* Management */}
           <div>
-            <p className="mb-3 px-3 text-xs font-semibold tracking-wider text-slate-500 uppercase">
+            <p className="mb-3 px-3 text-xs font-semibold tracking-wider text-[var(--muted)] uppercase">
               Management
             </p>
 
@@ -153,12 +158,11 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
                       `flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${
                         isActive
                           ? "bg-sky-500/10 text-sky-400"
-                          : "text-slate-400 hover:bg-white/5 hover:text-white"
-                      } `
+                          : "text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--foreground)]"
+                      }`
                     }
                   >
                     <Icon size={19} />
-
                     <span>{link.label}</span>
                   </NavLink>
                 );
@@ -168,7 +172,7 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
 
           {/* System */}
           <div>
-            <p className="mb-3 px-3 text-xs font-semibold tracking-wider text-slate-500 uppercase">
+            <p className="mb-3 px-3 text-xs font-semibold tracking-wider text-[var(--muted)] uppercase">
               System
             </p>
 
@@ -180,8 +184,8 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
                   `flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${
                     isActive
                       ? "bg-sky-500/10 text-sky-400"
-                      : "text-slate-400 hover:bg-white/5 hover:text-white"
-                  } `
+                      : "text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--foreground)]"
+                  }`
                 }
               >
                 <MdSettings size={19} />
@@ -192,16 +196,18 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
         </nav>
 
         {/* User */}
-        <div className="border-t border-white/10 pt-5">
+        <div className="border-t border-[var(--border)] pt-5">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 font-semibold text-sky-400">
               A
             </div>
 
             <div>
-              <p className="text-sm font-semibold text-white">Admin User</p>
+              <p className="text-sm font-semibold text-[var(--foreground)]">
+                Admin User
+              </p>
 
-              <p className="text-xs text-slate-500">Administrator</p>
+              <p className="text-xs text-[var(--muted)]">Administrator</p>
             </div>
           </div>
 

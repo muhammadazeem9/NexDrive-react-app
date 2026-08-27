@@ -10,7 +10,9 @@ const SectionTitle = ({ subtitle, title }: SectionTitleProps) => {
         {subtitle}
       </p>
 
-      <h2 className="mt-2 text-4xl font-bold">{title}</h2>
+      <h2 className="mt-2 text-4xl font-bold text-[var(--foreground)] transition-colors duration-300">
+        {title}
+      </h2>
     </div>
   );
 };

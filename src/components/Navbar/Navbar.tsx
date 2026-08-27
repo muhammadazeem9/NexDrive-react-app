@@ -20,12 +20,12 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="border-b border-white/10 bg-[#050d18] text-white">
+    <nav className="border-b border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
       <Container>
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link to="/" className="group">
-            <h1 className="text-2xl font-bold tracking-tight text-white transition">
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--foreground)] transition">
               Nex<span className="text-blue-500">Drive</span>
             </h1>
           </Link>
@@ -40,7 +40,7 @@ const Navbar = () => {
                     `relative text-sm font-medium transition ${
                       isActive
                         ? "text-blue-500"
-                        : "text-gray-300 hover:text-white"
+                        : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     }`
                   }
                 >
@@ -66,11 +66,11 @@ const Navbar = () => {
             {/* Cart */}
             <Link
               to="/cart"
-              className="group relative rounded-full p-2 transition hover:bg-white/10"
+              className="group relative rounded-full p-2 transition hover:bg-slate-200 dark:hover:bg-white/10"
             >
               <FiShoppingCart
                 size={20}
-                className="text-gray-300 transition group-hover:text-blue-500"
+                className="text-[var(--muted)] transition group-hover:text-blue-500"
               />
 
               {totalItems > 0 && (
@@ -83,11 +83,11 @@ const Navbar = () => {
             {/* User */}
             <Link
               to="/auth"
-              className="group rounded-full p-2 transition hover:bg-white/10"
+              className="group rounded-full p-2 transition hover:bg-slate-200 dark:hover:bg-white/10"
             >
               <FiUser
                 size={20}
-                className="text-gray-300 transition group-hover:text-blue-500"
+                className="text-[var(--muted)] transition group-hover:text-blue-500"
               />
             </Link>
 
@@ -95,10 +95,10 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setIsOpen(true)}
-              className="rounded-lg p-2 transition hover:bg-white/10 lg:hidden"
+              className="rounded-lg p-2 transition hover:bg-slate-200 lg:hidden dark:hover:bg-white/10"
               aria-label="Open menu"
             >
-              <FiMenu size={25} className="text-gray-200" />
+              <FiMenu size={25} className="text-[var(--foreground)]" />
             </button>
           </div>
         </div>

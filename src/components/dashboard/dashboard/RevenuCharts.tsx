@@ -31,37 +31,50 @@ const RevenueChart = () => {
             </linearGradient>
           </defs>
 
-          <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
+          {/* Grid */}
+          <CartesianGrid
+            stroke="var(--border)"
+            strokeOpacity={0.7}
+            vertical={false}
+          />
 
+          {/* X Axis */}
           <XAxis
             dataKey="month"
             axisLine={false}
             tickLine={false}
             tick={{
-              fill: "#64748b",
+              fill: "var(--muted)",
               fontSize: 12,
             }}
           />
 
+          {/* Y Axis */}
           <YAxis
             axisLine={false}
             tickLine={false}
             tick={{
-              fill: "#64748b",
+              fill: "var(--muted)",
               fontSize: 12,
             }}
             tickFormatter={(value) => `$${value / 1000}k`}
           />
 
+          {/* Tooltip */}
           <Tooltip
             contentStyle={{
-              backgroundColor: "#0b1627",
-              border: "1px solid rgba(255,255,255,0.1)",
+              backgroundColor: "var(--card)",
+              border: "1px solid var(--border)",
               borderRadius: "12px",
-              color: "#fff",
+              color: "var(--card-foreground)",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.12)",
             }}
             labelStyle={{
-              color: "#94a3b8",
+              color: "var(--muted)",
+              marginBottom: "4px",
+            }}
+            itemStyle={{
+              color: "var(--card-foreground)",
             }}
             formatter={(value) => [
               `$${Number(value).toLocaleString()}`,
@@ -69,6 +82,7 @@ const RevenueChart = () => {
             ]}
           />
 
+          {/* Revenue Area */}
           <Area
             type="monotone"
             dataKey="revenue"

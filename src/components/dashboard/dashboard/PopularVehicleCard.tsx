@@ -9,9 +9,9 @@ interface PopularVehicleCardProps {
 
 const PopularVehicleCard = ({ vehicle }: PopularVehicleCardProps) => {
   return (
-    <div className="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/[0.02] p-3 transition hover:border-sky-400/20 hover:bg-white/[0.04]">
+    <div className="group flex items-center gap-4 rounded-xl border border-[var(--border)] bg-[var(--background)] p-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-400/40 hover:shadow-md">
       {/* Image */}
-      <div className="h-20 w-24 shrink-0 overflow-hidden rounded-lg bg-slate-900">
+      <div className="h-20 w-24 shrink-0 overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-900">
         <img
           src={vehicle.image}
           alt={vehicle.name}
@@ -21,12 +21,16 @@ const PopularVehicleCard = ({ vehicle }: PopularVehicleCardProps) => {
 
       {/* Information */}
       <div className="min-w-0 flex-1">
+        {/* Title + Arrow */}
         <div className="flex items-start justify-between gap-2">
-          <h3 className="truncate text-sm font-semibold text-white">
+          <h3 className="truncate text-sm font-semibold text-[var(--foreground)]">
             {vehicle.name}
           </h3>
 
-          <button className="shrink-0 rounded-lg p-1 text-slate-500 transition hover:bg-sky-400/10 hover:text-sky-400">
+          <button
+            type="button"
+            className="shrink-0 rounded-lg p-1 text-[var(--muted)] transition hover:bg-sky-500/10 hover:text-sky-500"
+          >
             <BsArrowUpRight size={16} />
           </button>
         </div>
@@ -35,18 +39,18 @@ const PopularVehicleCard = ({ vehicle }: PopularVehicleCardProps) => {
         <div className="mt-2 flex items-center gap-1">
           <BiStar size={13} className="fill-current text-yellow-400" />
 
-          <span className="text-xs font-medium text-slate-300">
+          <span className="text-xs font-medium text-[var(--muted)]">
             {vehicle.rating}
           </span>
         </div>
 
         {/* Bottom */}
         <div className="mt-2 flex items-center justify-between">
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-[var(--muted)]">
             {vehicle.bookings} bookings
           </span>
 
-          <span className="text-xs font-semibold text-sky-400">
+          <span className="text-xs font-semibold text-sky-500">
             ${vehicle.pricePerDay}/day
           </span>
         </div>

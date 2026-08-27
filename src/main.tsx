@@ -8,11 +8,14 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { CartProvider } from "./context/CartContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <CartProvider>
-      <RouterProvider router={router} />
-    </CartProvider>
+    <ThemeProvider>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </ThemeProvider>
   </StrictMode>,
 );

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+/* @import "tailwindcss";
 
 body {
   background-color: #050d18;
@@ -24,4 +24,70 @@ body {
   width: 18px;
   border-radius: 999px;
   background: #3b82f6;
+} */
+
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+
+  --card: #f8fafc;
+  --card-foreground: #0f172a;
+
+  --border: #e2e8f0;
+
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+
+  --muted: #64748b;
+}
+
+.dark {
+  --background: #050d18;
+  --foreground: #ffffff;
+
+  --card: #0b1627;
+  --card-foreground: #ffffff;
+
+  --border: #1e293b;
+
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+
+  --muted: #94a3b8;
+}
+
+html,
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Hero Swiper */
+.hero-swiper .swiper-pagination {
+  bottom: 18px !important;
+  left: 48px !important;
+  width: auto !important;
+  text-align: left;
+}
+
+.hero-swiper .swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+  background: #64748b;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+  width: 18px;
+  border-radius: 999px;
+  background: var(--primary);
 }

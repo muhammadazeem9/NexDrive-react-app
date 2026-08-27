@@ -11,7 +11,7 @@ const ProductRating = ({ rating }: ProductRatingProps) => {
         <FaStar
           key={index}
           size={14}
-          className={index < rating ? "text-yellow-400" : "text-gray-300"}
+          className={index < rating ? "text-yellow-400" : "text-[var(--muted)]"}
         />
       ))}
     </div>
