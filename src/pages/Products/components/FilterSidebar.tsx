@@ -1,12 +1,8 @@
-import CategoryFilter from "./CategoryFilter";
 import BrandFilter from "./BrandFilter";
 import PriceFilter from "./PriceFilter";
 import RatingFilter from "./RatingFilter";
 
 type FilterProps = {
-  category: string[];
-  setCategory: React.Dispatch<React.SetStateAction<string[]>>;
-
   brand: string[];
   setBrand: React.Dispatch<React.SetStateAction<string[]>>;
 
@@ -18,8 +14,6 @@ type FilterProps = {
 };
 
 const FilterSidebar = ({
-  category,
-  setCategory,
   brand,
   setBrand,
   price,
@@ -28,7 +22,6 @@ const FilterSidebar = ({
   setRating,
 }: FilterProps) => {
   const handleResetFilters = () => {
-    setCategory([]);
     setBrand([]);
     setPrice([]);
     setRating(null);
@@ -39,8 +32,6 @@ const FilterSidebar = ({
       <h2 className="mb-6 text-2xl font-bold text-[var(--foreground)]">
         Filters
       </h2>
-
-      <CategoryFilter value={category} onChange={setCategory} />
 
       <BrandFilter value={brand} onChange={setBrand} />
 

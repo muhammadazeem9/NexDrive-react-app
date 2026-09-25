@@ -8,14 +8,46 @@ import {
   Tooltip,
 } from "recharts";
 
-import { revenueData } from "../../../data/dashboard";
+import type { RevenueItem } from "../../../api/admin/admin.api";
 
-const RevenueChart = () => {
+interface RevenueChartProps {
+  data: RevenueItem[];
+  loading: boolean;
+}
+
+const RevenueChart = ({ data, loading }: RevenueChartProps) => {
+  const chartData = data.map((item) => ({
+    date: new Date(item._id).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
+    revenue: item.revenue,
+    bookings: item.bookings,
+  }));
+
+  if (loading) {
+    return (
+      <div className="mt-6 flex h-[300px] w-full items-center justify-center">
+        <p className="text-sm text-[var(--muted)]">Loading revenue...</p>
+      </div>
+    );
+  }
+
+  if (!chartData.length) {
+    return (
+      <div className="mt-6 flex h-[300px] w-full items-center justify-center">
+        <p className="text-sm text-[var(--muted)]">
+          No revenue data available.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-6 h-[300px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
-          data={revenueData}
+          data={chartData}
           margin={{
             top: 10,
             right: 10,
@@ -31,16 +63,14 @@ const RevenueChart = () => {
             </linearGradient>
           </defs>
 
-          {/* Grid */}
           <CartesianGrid
             stroke="var(--border)"
             strokeOpacity={0.7}
             vertical={false}
           />
 
-          {/* X Axis */}
           <XAxis
-            dataKey="month"
+            dataKey="date"
             axisLine={false}
             tickLine={false}
             tick={{
@@ -49,7 +79,6 @@ const RevenueChart = () => {
             }}
           />
 
-          {/* Y Axis */}
           <YAxis
             axisLine={false}
             tickLine={false}
@@ -60,7 +89,6 @@ const RevenueChart = () => {
             tickFormatter={(value) => `$${value / 1000}k`}
           />
 
-          {/* Tooltip */}
           <Tooltip
             contentStyle={{
               backgroundColor: "var(--card)",
@@ -82,7 +110,6 @@ const RevenueChart = () => {
             ]}
           />
 
-          {/* Revenue Area */}
           <Area
             type="monotone"
             dataKey="revenue"

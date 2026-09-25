@@ -1,8 +1,13 @@
-import { recentBookings } from "../../../data/dashboard";
+import type { RecentBooking } from "../../../types/dashboard";
 import BookingStatus from "./BookingStatus";
 import { BsArrowUpRight } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
-const RecentBookings = () => {
+interface RecentBookingsProps {
+  bookings: RecentBooking[];
+}
+
+const RecentBookings = ({ bookings }: RecentBookingsProps) => {
   return (
     <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-sm">
       {/* Header */}
@@ -17,9 +22,11 @@ const RecentBookings = () => {
           </p>
         </div>
 
-        <button className="text-xs font-medium text-sky-500 transition hover:text-sky-400">
-          View all
-        </button>
+        <Link to={"/dashboard/bookings"}>
+          <button className="cursor-pointer text-xs font-medium text-sky-500 transition hover:text-sky-400">
+            View all
+          </button>
+        </Link>
       </div>
 
       {/* Desktop table */}
@@ -54,7 +61,7 @@ const RecentBookings = () => {
           </thead>
 
           <tbody>
-            {recentBookings.map((booking) => (
+            {bookings.map((booking) => (
               <tr
                 key={booking.id}
                 className="border-b border-[var(--border)] transition-colors hover:bg-sky-500/[0.03]"
@@ -123,7 +130,7 @@ const RecentBookings = () => {
 
       {/* Mobile cards */}
       <div className="space-y-3 p-4 md:hidden">
-        {recentBookings.map((booking) => (
+        {bookings.map((booking) => (
           <div
             key={booking.id}
             className="rounded-xl border border-[var(--border)] bg-[var(--background)] p-4 shadow-sm transition hover:border-sky-400/30"

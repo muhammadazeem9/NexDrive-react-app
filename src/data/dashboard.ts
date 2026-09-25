@@ -3,41 +3,43 @@ import type { RevenueData } from "../types/dashboard";
 import type { PopularVehicle } from "../types/dashboard";
 import type { RecentBooking } from "../types/dashboard";
 
-// data for dashboard stat
 export const dashboardStats: StatCardData[] = [
   {
     title: "Total Revenue",
-    value: "$24,580",
-    change: "+12.5%",
-    description: "vs last month",
+    value: "0",
+    change: "",
+    description: "All time",
     icon: "revenue",
     positive: true,
   },
+
   {
     title: "Total Bookings",
-    value: "1,284",
-    change: "+8.2%",
-    description: "vs last month",
+    value: "0",
+    change: "",
+    description: "All bookings",
     icon: "bookings",
     positive: true,
   },
+
   {
     title: "Available Vehicles",
-    value: "56",
-    change: "+4",
-    description: "this month",
+    value: "0",
+    change: "",
+    description: "Current fleet",
     icon: "vehicles",
     positive: true,
   },
+
   {
     title: "Total Customers",
-    value: "842",
-    change: "+15.4%",
-    description: "vs last month",
+    value: "0",
+    change: "",
+    description: "Registered users",
     icon: "customers",
     positive: true,
   },
-];  
+];
 
 // data for revenue section
 export const revenueData: RevenueData[] = [
@@ -111,7 +113,7 @@ export const popularVehicles: PopularVehicle[] = [
   },
 ];
 
-// data for recent book 
+// data for recent book
 export const recentBookings: RecentBooking[] = [
   {
     id: "BK-1001",

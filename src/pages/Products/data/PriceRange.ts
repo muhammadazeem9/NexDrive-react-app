@@ -1,19 +1,19 @@
 export const priceRange = [
   {
-    label: "Under $30k",
+    label: "Under $5k",
     min: 0,
-    max: 30000,
+    max: 5000,
   },
 
   {
-    label: "$30k - $60k",
-    min: 30000,
-    max: 60000,
+    label: "$5k - $50k",
+    min: 5000,
+    max: 50000,
   },
 
   {
-    label: "Above $60k",
-    min: 60000,
+    label: "Above $50k",
+    min: 50000,
     max: 100000,
   },
 ];

@@ -1,5 +1,5 @@
 import { BsArrowUpRight } from "react-icons/bs";
-import { BiStar } from "react-icons/bi";
+import { BiCar } from "react-icons/bi";
 
 import type { PopularVehicle } from "../../../types/dashboard";
 
@@ -10,12 +10,11 @@ interface PopularVehicleCardProps {
 const PopularVehicleCard = ({ vehicle }: PopularVehicleCardProps) => {
   return (
     <div className="group flex items-center gap-4 rounded-xl border border-[var(--border)] bg-[var(--background)] p-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-400/40 hover:shadow-md">
-      {/* Image */}
-      <div className="h-20 w-24 shrink-0 overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-900">
-        <img
-          src={vehicle.image}
-          alt={vehicle.name}
-          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+      {/* Vehicle Image Placeholder */}
+      <div className="flex h-20 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-900">
+        <BiCar
+          size={32}
+          className="text-slate-400 transition duration-300 group-hover:scale-110"
         />
       </div>
 
@@ -35,14 +34,10 @@ const PopularVehicleCard = ({ vehicle }: PopularVehicleCardProps) => {
           </button>
         </div>
 
-        {/* Rating */}
-        <div className="mt-2 flex items-center gap-1">
-          <BiStar size={13} className="fill-current text-yellow-400" />
-
-          <span className="text-xs font-medium text-[var(--muted)]">
-            {vehicle.rating}
-          </span>
-        </div>
+        {/* Vehicle Info */}
+        <p className="mt-2 text-xs text-[var(--muted)]">
+          {vehicle.brand} {vehicle.model} • {vehicle.year}
+        </p>
 
         {/* Bottom */}
         <div className="mt-2 flex items-center justify-between">

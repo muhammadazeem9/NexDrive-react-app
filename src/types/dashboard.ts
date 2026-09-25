@@ -1,4 +1,3 @@
-// interface type for statcards of dshboard
 export interface StatCardData {
   title: string;
   value: string;
@@ -8,24 +7,22 @@ export interface StatCardData {
   positive: boolean;
 }
 
-// interface type for revenuedata of dashboard
 export interface RevenueData {
   month: string;
   revenue: number;
   bookings: number;
 }
 
-// interface type for popularVehicle of dashboard
 export interface PopularVehicle {
-  id: number;
+  id: string;
   name: string;
-  image: string;
+  brand: string;
+  model: string;
+  year: number;
   bookings: number;
-  rating: number;
   pricePerDay: number;
 }
 
-// interface type for recentbooking of dashboard
 export interface RecentBooking {
   id: string;
   customer: {
@@ -35,5 +32,53 @@ export interface RecentBooking {
   vehicle: string;
   date: string;
   amount: number;
-  status: "Confirmed" | "Pending" | "Completed" | "Cancelled";
+  status: "Confirmed" | "Pending" | "Active" | "Completed" | "Cancelled";
+}
+
+// Backend dashboard response
+
+export interface DashboardStats {
+  totalVehicles: number;
+  totalBookings: number;
+  totalCustomers: number;
+  totalRevenue: number;
+  pendingBookings: number;
+  confirmedBookings: number;
+  activeBookings: number;
+  completedBookings: number;
+  cancelledBookings: number;
+}
+
+export interface DashboardUser {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+export interface DashboardVehicle {
+  _id: string;
+  name: string;
+  brand: string;
+  model: string;
+  year: number;
+  pricePerDay: number;
+}
+
+export interface DashboardBooking {
+  _id: string;
+  user: DashboardUser;
+  vehicle: DashboardVehicle;
+  startDate: string;
+  endDate: string;
+  status: "pending" | "confirmed" | "active" | "completed" | "cancelled";
+  totalDays: number;
+  totalPrice: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DashboardResponse {
+  success: boolean;
+  stats: DashboardStats;
+  recentBookings: DashboardBooking[];
 }

@@ -8,9 +8,13 @@ import About from "../pages/About/About";
 import Contact from "../pages/Contact/Contact";
 import NotFound from "../pages/NotFound/NotFound";
 import ProductDetails from "../pages/productDetails/ProductDetails";
+import BookingPage from "../pages/bookings/booking";
+import Mybookings from "../pages/bookings/mybookings";
 import CartPage from "../pages/CartPage/Cartpage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import Auth from "../pages/Auth/Auth";
+
+import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Vehicles from "../pages/Dashboard/Vehicles";
 import Bookings from "../pages/Dashboard/Bookings";
@@ -40,6 +44,8 @@ export const router = createBrowserRouter([
         path: "products/:id",
         element: <ProductDetails />,
       },
+      { path: "booking/:vehicleId", element: <BookingPage /> },
+      { path: "mybookings", element: <Mybookings /> },
       {
         path: "about",
         element: <About />,
@@ -63,44 +69,50 @@ export const router = createBrowserRouter([
     ],
   },
   // Admin dashboard routes
+  // Protected dashboard routes
   {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "/dashboard/vehicles",
-    element: <Vehicles />,
-  },
-  {
-    path: "/dashboard/bookings",
-    element: <Bookings />,
-  },
-  {
-    path: "dashboard/bookings/:bookingId",
-    element: <BookingDetails />,
-  },
-  {
-    path: "dashboard/customers",
-    element: <Customer />,
-  },
-  {
-    path: "dashboard/customers/:customerId",
-    element: <CustomerDetails />,
-  },
-  {
-    path: "dashboard/payments",
-    element: <Payments />,
-  },
-  {
-    path: "dashboard/reviews",
-    element: <Reviews />,
-  },
-  {
-    path: "dashboard/analytics",
-    element: <Analytics />,
-  },
-  {
-    path: "dashboard/settings",
-    element: <Settings />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "/dashboard/vehicles",
+        element: <Vehicles />,
+      },
+      {
+        path: "/dashboard/bookings",
+        element: <Bookings />,
+      },
+      {
+        path: "/dashboard/bookings/:bookingId",
+        element: <BookingDetails />,
+      },
+      {
+        path: "/dashboard/customers",
+        element: <Customer />,
+      },
+      {
+        path: "/dashboard/customers/:id",
+        element: <CustomerDetails />,
+      },
+      {
+        path: "/dashboard/payments",
+        element: <Payments />,
+      },
+      {
+        path: "/dashboard/reviews",
+        element: <Reviews />,
+      },
+      {
+        path: "/dashboard/analytics",
+        element: <Analytics />,
+      },
+      {
+        path: "/dashboard/settings",
+        element: <Settings />,
+      },
+    ],
   },
 ]);

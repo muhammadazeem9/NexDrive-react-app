@@ -1,1 +1,9 @@
-export const brands = ["Chevrolet", "Ford", "Dodge", "BMW"];
+export const brands = [
+  "Toyota",
+  "Honda",
+  "Audi",
+  "Suzuki",
+  "Hyundai",
+  "Mercedes",
+  "MG",
+];

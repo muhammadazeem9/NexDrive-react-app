@@ -1,15 +1,37 @@
 import { useEffect, useState } from "react";
 import { MdClose, MdCloudUpload } from "react-icons/md";
 
-import type { Vehicle, VehicleStatusType } from "../../../types/vehicle";
+import type {
+  Vehicle,
+  vehiclePayload,
+} from "../../../api/admin/adminVehicle.api";
 
 interface AddVehicleModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (vehicle: Vehicle) => void;
+
+  onAdd: (vehicle: vehiclePayload) => Promise<void>;
+
   editingVehicle?: Vehicle | null;
-  onUpdate: (vehicle: Vehicle) => void;
+
+  onUpdate: (id: string, vehicle: vehiclePayload) => Promise<void>;
 }
+
+interface FormData {
+  name: string;
+  brand: string;
+  model: string;
+  year: string;
+  pricePerDay: string;
+}
+
+const emptyForm: FormData = {
+  name: "",
+  brand: "",
+  model: "",
+  year: "",
+  pricePerDay: "",
+};
 
 const AddVehicleModal = ({
   isOpen,
@@ -18,81 +40,124 @@ const AddVehicleModal = ({
   editingVehicle,
   onUpdate,
 }: AddVehicleModalProps) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    brand: "",
-    category: "",
-    pricePerDay: "",
-    status: "Available" as VehicleStatusType,
-    image: "",
-  });
+  const [formData, setFormData] = useState<FormData>(emptyForm);
 
+  const [error, setError] = useState("");
+
+  const [submitting, setSubmitting] = useState(false);
+
+  // =========================
   // Fill form when editing
+  // =========================
   useEffect(() => {
     if (editingVehicle) {
       setFormData({
         name: editingVehicle.name,
         brand: editingVehicle.brand,
-        category: editingVehicle.category,
+        model: editingVehicle.model,
+        year: String(editingVehicle.year),
         pricePerDay: String(editingVehicle.pricePerDay),
-        status: editingVehicle.status,
-        image: editingVehicle.image,
       });
     } else {
-      setFormData({
-        name: "",
-        brand: "",
-        category: "",
-        pricePerDay: "",
-        status: "Available",
-        image: "",
-      });
+      setFormData(emptyForm);
     }
+
+    setError("");
   }, [editingVehicle, isOpen]);
 
   if (!isOpen) {
     return null;
   }
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
+  // =========================
+  // Input change
+  // =========================
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+
+    setError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // =========================
+  // Submit
+  // =========================
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const vehicleData: Vehicle = {
-      // Keep old ID when editing
-      id: editingVehicle?.id ?? `VH-${Date.now()}`,
-
-      name: formData.name,
-      brand: formData.brand,
-      category: formData.category,
-      image: formData.image,
-      pricePerDay: Number(formData.pricePerDay),
-
-      // Keep existing bookings when editing
-      bookings: editingVehicle?.bookings ?? 0,
-
-      status: formData.status,
-    };
-
-    if (editingVehicle) {
-      // EDIT
-      onUpdate(vehicleData);
-    } else {
-      // ADD
-      onAdd(vehicleData);
+    if (submitting) {
+      return;
     }
 
-    onClose();
+    const year = Number(formData.year);
+    const pricePerDay = Number(formData.pricePerDay);
+
+    // =========================
+    // Validation
+    // =========================
+    if (!formData.name.trim()) {
+      setError("Vehicle name is required.");
+      return;
+    }
+
+    if (!formData.brand.trim()) {
+      setError("Brand is required.");
+      return;
+    }
+
+    if (!formData.model.trim()) {
+      setError("Model is required.");
+      return;
+    }
+
+    if (!formData.year || Number.isNaN(year) || year < 1900) {
+      setError("Please enter a valid vehicle year.");
+      return;
+    }
+
+    if (
+      formData.pricePerDay === "" ||
+      Number.isNaN(pricePerDay) ||
+      pricePerDay < 0
+    ) {
+      setError("Please enter a valid price per day.");
+      return;
+    }
+
+    const vehicleData: vehiclePayload = {
+      name: formData.name.trim(),
+      brand: formData.brand.trim(),
+      model: formData.model.trim(),
+      year,
+      pricePerDay,
+    };
+
+    // =========================
+    // API request
+    // =========================
+    try {
+      setSubmitting(true);
+      setError("");
+
+      if (editingVehicle) {
+        await onUpdate(editingVehicle._id, vehicleData);
+      } else {
+        await onAdd(vehicleData);
+      }
+
+      onClose();
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -116,7 +181,8 @@ const AddVehicleModal = ({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-2 text-slate-400 transition hover:bg-white/5 hover:text-white"
+            disabled={submitting}
+            className="rounded-lg p-2 text-slate-400 transition hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             <MdClose size={22} />
           </button>
@@ -124,8 +190,16 @@ const AddVehicleModal = ({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6 p-6">
-          {/* Vehicle name + Brand */}
+          {/* Error */}
+          {error && (
+            <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              {error}
+            </div>
+          )}
+
+          {/* Vehicle Name + Brand */}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {/* Name */}
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-300">
                 Vehicle Name
@@ -138,10 +212,12 @@ const AddVehicleModal = ({
                 onChange={handleChange}
                 placeholder="e.g. M4 Competition"
                 required
-                className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white transition outline-none placeholder:text-slate-600 focus:border-sky-400/50"
+                disabled={submitting}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-sky-400/50 disabled:opacity-50"
               />
             </div>
 
+            {/* Brand */}
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-300">
                 Brand
@@ -154,99 +230,97 @@ const AddVehicleModal = ({
                 onChange={handleChange}
                 placeholder="e.g. BMW"
                 required
-                className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white transition outline-none placeholder:text-slate-600 focus:border-sky-400/50"
+                disabled={submitting}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-sky-400/50 disabled:opacity-50"
               />
             </div>
           </div>
 
-          {/* Category + Price */}
+          {/* Model + Year */}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {/* Model */}
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-300">
-                Category
+                Model
               </label>
 
-              <select
-                name="category"
-                value={formData.category}
+              <input
+                type="text"
+                name="model"
+                value={formData.model}
                 onChange={handleChange}
+                placeholder="e.g. M4"
                 required
-                className="w-full rounded-xl border border-white/10 bg-[#0b1627] px-4 py-3 text-sm text-slate-300 outline-none focus:border-sky-400/50"
-              >
-                <option value="">Select category</option>
-                <option value="Sports">Sports</option>
-                <option value="Luxury">Luxury</option>
-                <option value="SUV">SUV</option>
-                <option value="Sedan">Sedan</option>
-                <option value="Electric">Electric</option>
-              </select>
+                disabled={submitting}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-sky-400/50 disabled:opacity-50"
+              />
             </div>
 
+            {/* Year */}
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-300">
-                Price Per Day
+                Year
               </label>
 
-              <div className="relative">
-                <span className="absolute top-1/2 left-4 -translate-y-1/2 text-sm text-slate-500">
-                  $
-                </span>
-
-                <input
-                  type="number"
-                  name="pricePerDay"
-                  value={formData.pricePerDay}
-                  onChange={handleChange}
-                  placeholder="320"
-                  min="0"
-                  required
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-3 pr-4 pl-8 text-sm text-white transition outline-none placeholder:text-slate-600 focus:border-sky-400/50"
-                />
-              </div>
+              <input
+                type="number"
+                name="year"
+                value={formData.year}
+                onChange={handleChange}
+                placeholder="2026"
+                min="1900"
+                required
+                disabled={submitting}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-sky-400/50 disabled:opacity-50"
+              />
             </div>
           </div>
 
-          {/* Status */}
+          {/* Price */}
           <div>
             <label className="mb-2 block text-sm font-medium text-slate-300">
-              Status
+              Price Per Day
             </label>
 
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className="w-full rounded-xl border border-white/10 bg-[#0b1627] px-4 py-3 text-sm text-slate-300 outline-none focus:border-sky-400/50"
-            >
-              <option value="Available">Available</option>
-              <option value="Booked">Booked</option>
-              <option value="Maintenance">Maintenance</option>
-            </select>
+            <div className="relative">
+              <span className="absolute top-1/2 left-4 -translate-y-1/2 text-sm text-slate-500">
+                $
+              </span>
+
+              <input
+                type="number"
+                name="pricePerDay"
+                value={formData.pricePerDay}
+                onChange={handleChange}
+                placeholder="320"
+                min="0"
+                step="0.01"
+                required
+                disabled={submitting}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-3 pr-4 pl-8 text-sm text-white outline-none placeholder:text-slate-600 focus:border-sky-400/50 disabled:opacity-50"
+              />
+            </div>
           </div>
 
           {/* Image */}
           <div>
             <label className="mb-2 block text-sm font-medium text-slate-300">
-              Vehicle Image URL
+              Vehicle Image
             </label>
 
             <div className="flex items-center gap-3 rounded-xl border border-dashed border-white/10 bg-white/[0.02] px-4 py-4">
               <MdCloudUpload size={24} className="shrink-0 text-sky-400" />
 
-              <input
-                type="text"
-                name="image"
-                value={formData.image}
-                onChange={handleChange}
-                placeholder="/images/cars/bmw-m4.jpg"
-                className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-600"
-              />
-            </div>
+              <div>
+                <p className="text-sm text-slate-400">
+                  Image upload coming soon
+                </p>
 
-            <p className="mt-2 text-xs text-slate-600">
-              For now, enter an existing image path. We'll implement real image
-              uploads with the backend later.
-            </p>
+                <p className="mt-1 text-xs text-slate-600">
+                  Your current backend does not have an image field yet.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Actions */}
@@ -254,16 +328,24 @@ const AddVehicleModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-white/10 px-5 py-2.5 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-white"
+              disabled={submitting}
+              className="rounded-xl border border-white/10 px-5 py-2.5 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="rounded-xl bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-400"
+              disabled={submitting}
+              className="rounded-xl bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {editingVehicle ? "Update Vehicle" : "Add Vehicle"}
+              {submitting
+                ? editingVehicle
+                  ? "Updating..."
+                  : "Adding..."
+                : editingVehicle
+                  ? "Update Vehicle"
+                  : "Add Vehicle"}
             </button>
           </div>
         </form>

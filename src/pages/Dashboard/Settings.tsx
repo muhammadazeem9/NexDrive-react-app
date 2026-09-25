@@ -1,4 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  getMyProfile,
+  updateProfile,
+  changePassword,
+} from "../../api/admin/profile.api";
 import {
   MdLock,
   MdNotifications,
@@ -19,6 +24,56 @@ const Settings = () => {
     marketing: true,
   });
 
+  // for profile changes
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    role: "admin",
+  });
+
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileMessage, setProfileMessage] = useState("");
+  const [profileError, setProfileError] = useState("");
+
+  // for password changes
+  const [password, setPassword] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        setProfileLoading(true);
+
+        const response = await getMyProfile();
+
+        const user = response.user;
+
+        setProfile({
+          name: user.name || "",
+          email: user.email || "",
+          phone: user.phone || "",
+          role: user.role || "admin",
+        });
+      } catch (error) {
+        console.error("Failed to load profile:", error);
+
+        setProfileError("Unable to load profile information.");
+      } finally {
+        setProfileLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, []);
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -126,10 +181,15 @@ const Settings = () => {
                       <label className="mb-2 block text-xs font-medium text-slate-400">
                         Full Name
                       </label>
-
                       <input
                         type="text"
-                        defaultValue="Admin User"
+                        value={profile.name}
+                        onChange={(e) =>
+                          setProfile((prev) => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
+                        }
                         className="w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-white transition outline-none focus:border-sky-400/50"
                       />
                     </div>
@@ -138,10 +198,15 @@ const Settings = () => {
                       <label className="mb-2 block text-xs font-medium text-slate-400">
                         Email Address
                       </label>
-
                       <input
                         type="email"
-                        defaultValue="admin@nexdrive.com"
+                        value={profile.email}
+                        onChange={(e) =>
+                          setProfile((prev) => ({
+                            ...prev,
+                            email: e.target.value,
+                          }))
+                        }
                         className="w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-white transition outline-none focus:border-sky-400/50"
                       />
                     </div>
@@ -165,7 +230,9 @@ const Settings = () => {
 
                       <input
                         type="text"
-                        value="Administrator"
+                        value={
+                          profile.role === "admin" ? "Administrator" : "User"
+                        }
                         disabled
                         className="w-full cursor-not-allowed rounded-xl border border-white/10 bg-white/[0.01] px-4 py-3 text-sm text-slate-600 outline-none"
                       />
@@ -173,10 +240,47 @@ const Settings = () => {
                   </div>
 
                   {/* Save */}
+
                   <div className="flex justify-end border-t border-white/10 pt-5">
-                    <button className="flex items-center gap-2 rounded-xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400">
+                    {profileMessage && (
+                      <p className="text-sm text-emerald-400">
+                        {profileMessage}
+                      </p>
+                    )}
+
+                    {profileError && (
+                      <p className="text-sm text-red-400">{profileError}</p>
+                    )}
+
+                    <button
+                      type="button"
+                      disabled={profileSaving}
+                      onClick={async () => {
+                        try {
+                          setProfileSaving(true);
+                          setProfileMessage("");
+                          setProfileError("");
+
+                          await updateProfile({
+                            name: profile.name,
+                            email: profile.email,
+                            phone: profile.phone,
+                          });
+
+                          setProfileMessage("Profile updated successfully.");
+                        } catch (error) {
+                          console.error("Failed to update profile:", error);
+
+                          setProfileError("Unable to update profile.");
+                        } finally {
+                          setProfileSaving(false);
+                        }
+                      }}
+                      className="flex items-center gap-2 rounded-xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
                       <MdSave size={18} />
-                      Save Changes
+
+                      {profileSaving ? "Saving..." : "Save Changes"}
                     </button>
                   </div>
                 </div>
@@ -428,6 +532,13 @@ const Settings = () => {
 
                       <input
                         type="password"
+                        value={password.currentPassword}
+                        onChange={(e) =>
+                          setPassword((prev) => ({
+                            ...prev,
+                            currentPassword: e.target.value,
+                          }))
+                        }
                         className="w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-white outline-none focus:border-sky-400/50"
                       />
                     </div>
@@ -439,6 +550,13 @@ const Settings = () => {
 
                       <input
                         type="password"
+                        value={password.newPassword}
+                        onChange={(e) =>
+                          setPassword((prev) => ({
+                            ...prev,
+                            newPassword: e.target.value,
+                          }))
+                        }
                         className="w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-white outline-none focus:border-sky-400/50"
                       />
                     </div>
@@ -447,17 +565,83 @@ const Settings = () => {
                       <label className="mb-2 block text-xs font-medium text-slate-400">
                         Confirm New Password
                       </label>
-
                       <input
                         type="password"
+                        value={password.confirmPassword}
+                        onChange={(e) =>
+                          setPassword((prev) => ({
+                            ...prev,
+                            confirmPassword: e.target.value,
+                          }))
+                        }
                         className="w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-white outline-none focus:border-sky-400/50"
                       />
                     </div>
 
                     <div className="flex justify-end border-t border-white/10 pt-5">
-                      <button className="flex items-center gap-2 rounded-xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white hover:bg-sky-400">
+                      {passwordMessage && (
+                        <p className="text-sm text-emerald-400">
+                          {passwordMessage}
+                        </p>
+                      )}
+
+                      {passwordError && (
+                        <p className="text-sm text-red-400">{passwordError}</p>
+                      )}
+                      <button
+                        type="button"
+                        disabled={passwordSaving}
+                        onClick={async () => {
+                          try {
+                            setPasswordMessage("");
+                            setPasswordError("");
+
+                            if (
+                              !password.currentPassword ||
+                              !password.newPassword ||
+                              !password.confirmPassword
+                            ) {
+                              setPasswordError(
+                                "All password fields are required.",
+                              );
+                              return;
+                            }
+
+                            if (
+                              password.newPassword !== password.confirmPassword
+                            ) {
+                              setPasswordError("New passwords do not match.");
+                              return;
+                            }
+
+                            setPasswordSaving(true);
+
+                            await changePassword(password);
+
+                            setPassword({
+                              currentPassword: "",
+                              newPassword: "",
+                              confirmPassword: "",
+                            });
+
+                            setPasswordMessage(
+                              "Password updated successfully.",
+                            );
+                          } catch (error) {
+                            console.error("Failed to update password:", error);
+
+                            setPasswordError(
+                              "Unable to update password. Please check your current password.",
+                            );
+                          } finally {
+                            setPasswordSaving(false);
+                          }
+                        }}
+                        className="flex items-center gap-2 rounded-xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
                         <MdLock size={18} />
-                        Update Password
+
+                        {passwordSaving ? "Updating..." : "Update Password"}
                       </button>
                     </div>
                   </div>

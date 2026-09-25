@@ -11,6 +11,10 @@ import {
   MdClose,
 } from "react-icons/md";
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../../../api/auth.api";
+import { useAuth } from "../../../context/AuthContext";
 
 interface DashboardSidebarProps {
   isOpen: boolean;
@@ -54,6 +58,11 @@ const managementLinks = [
 ];
 
 const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
+  const navigate = useNavigate();
+
+  const { user, setUser } = useAuth();
+  const [loggingOut, setLoggingOut] = useState(false);
+
   return (
     <>
       {/* Mobile overlay */}
@@ -198,22 +207,54 @@ const DashboardSidebar = ({ isOpen, onClose }: DashboardSidebarProps) => {
         {/* User */}
         <div className="border-t border-[var(--border)] pt-5">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 font-semibold text-sky-400">
-              A
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-500/10 font-semibold text-sky-400">
+              {user?.name?.charAt(0).toUpperCase() || "A"}
             </div>
 
-            <div>
-              <p className="text-sm font-semibold text-[var(--foreground)]">
-                Admin User
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                {user?.name || "Admin User"}
               </p>
 
-              <p className="text-xs text-[var(--muted)]">Administrator</p>
+              <p className="text-xs text-[var(--muted)] capitalize">
+                {user?.role === "admin"
+                  ? "Administrator"
+                  : user?.role || "User"}
+              </p>
             </div>
           </div>
 
-          <button className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-red-400 transition hover:bg-red-500/10">
+          <button
+            type="button"
+            disabled={loggingOut}
+            onClick={async () => {
+              try {
+                setLoggingOut(true);
+
+                await logoutUser();
+
+                // Clear frontend auth state
+                setUser(null);
+
+                // Redirect to login
+                navigate("/auth", { replace: true });
+              } catch (error) {
+                console.error("Logout failed:", error);
+
+                // Even if the server request fails,
+                // remove the local auth state.
+                setUser(null);
+
+                navigate("/auth", { replace: true });
+              } finally {
+                setLoggingOut(false);
+              }
+            }}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-red-400 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+          >
             <MdLogout size={19} />
-            <span>Logout</span>
+
+            <span>{loggingOut ? "Logging out..." : "Logout"}</span>
           </button>
         </div>
       </aside>

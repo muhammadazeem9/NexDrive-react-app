@@ -43,8 +43,6 @@ const ProductsPage = () => {
           <aside className="lg:col-span-1">
             <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm transition-colors duration-300">
               <FilterSidebar
-                category={category}
-                setCategory={setCategory}
                 brand={brand}
                 setBrand={setBrand}
                 price={price}
@@ -70,7 +68,6 @@ const ProductsPage = () => {
             {/* Grid */}
             <ProductGrid
               search={search}
-              category={category}
               brand={brand}
               price={price}
               rating={rating}

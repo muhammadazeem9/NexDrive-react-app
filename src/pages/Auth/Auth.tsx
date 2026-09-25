@@ -1,9 +1,124 @@
 import { useState } from "react";
-import { FiLock, FiMail, FiUser } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import type { FormEvent } from "react";
+import {
+  FiEyeOff,
+  FiEye,
+  FiLock,
+  FiMail,
+  FiUser,
+  FiPhone,
+} from "react-icons/fi";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+
+// backend api
+import { registerUser, loginUser } from "../../api/auth.api";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("+92");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  // Get authentication state/actions
+  const { setUser } = useAuth();
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    if (!isLogin && password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // =========================
+      // LOGIN
+      // =========================
+      if (isLogin) {
+        const data = await loginUser({
+          email,
+          password,
+        });
+
+        // Update global authentication state
+        setUser(data.user);
+
+        // ========================= // ADMIN REDIRECT // =========================
+        if (data.user.role === "admin") {
+          navigate("/dashboard");
+          return;
+        }
+
+        // Check if user was trying to book a specific vehicle
+        const bookingVehicleId = sessionStorage.getItem("bookingVehicleId");
+
+        if (bookingVehicleId) {
+          sessionStorage.removeItem("bookingVehicleId");
+
+          navigate(`/booking/${bookingVehicleId}`);
+        } else {
+          navigate("/");
+        }
+
+        return;
+      }
+
+      // =========================
+      // REGISTER
+      // =========================
+
+      const data = await registerUser({
+        name,
+        email,
+        phone,
+        password,
+        confirmPassword,
+      });
+
+      // Registration also logs the user in
+      setUser(data.user);
+
+      // Check if user was trying to book a specific vehicle
+      const bookingVehicleId = sessionStorage.getItem("bookingVehicleId");
+
+      if (bookingVehicleId) {
+        sessionStorage.removeItem("bookingVehicleId");
+
+        navigate(`/booking/${bookingVehicleId}`);
+      } else {
+        navigate("/");
+      }
+
+      // Reset form
+      setName("");
+      setEmail("");
+      setPhone("");
+      setPassword("");
+      setConfirmPassword("");
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gray-50 px-4 py-10 text-gray-900 dark:bg-[#050816] dark:text-white">
@@ -109,8 +224,15 @@ const Auth = () => {
             </p>
           </div>
 
+          {/* Error */}
+          {error && (
+            <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+              {error}
+            </div>
+          )}
+
           {/* Form */}
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Full Name */}
             {!isLogin && (
               <div className="group relative">
@@ -119,6 +241,8 @@ const Auth = () => {
                 <input
                   type="text"
                   placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pr-4 pl-11 text-sm text-gray-900 transition outline-none placeholder:text-gray-400 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-gray-600 dark:focus:bg-white/[0.06]"
                 />
               </div>
@@ -131,31 +255,78 @@ const Auth = () => {
               <input
                 type="email"
                 placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pr-4 pl-11 text-sm text-gray-900 transition outline-none placeholder:text-gray-400 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-gray-600 dark:focus:bg-white/[0.06]"
               />
             </div>
 
+            {/* phone */}
+            {!isLogin && (
+              <div className="group relative">
+                <FiPhone className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400 transition group-focus-within:text-blue-500 dark:text-gray-600" />
+
+                <input
+                  type="tel"
+                  placeholder="Phone number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pr-4 pl-11 text-sm text-gray-900 transition outline-none placeholder:text-gray-400 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-gray-600 dark:focus:bg-white/[0.06]"
+                />
+              </div>
+            )}
+
             {/* Password */}
             <div className="group relative">
-              <FiLock className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400 transition group-focus-within:text-blue-500 dark:text-gray-600" />
+              <FiLock className="absolute top-1/2 left-4 z-10 -translate-y-1/2 text-gray-400 transition group-focus-within:text-blue-500 dark:text-gray-600" />
 
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pr-4 pl-11 text-sm text-gray-900 transition outline-none placeholder:text-gray-400 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-gray-600 dark:focus:bg-white/[0.06]"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pr-11 pl-11 text-sm text-gray-900 transition outline-none placeholder:text-gray-400 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-gray-600 dark:focus:bg-white/[0.06]"
               />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-400 transition hover:text-blue-500 dark:text-gray-600"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+              </button>
             </div>
 
             {/* Confirm Password */}
             {!isLogin && (
               <div className="group relative">
-                <FiLock className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400 transition group-focus-within:text-blue-500 dark:text-gray-600" />
+                <FiLock className="absolute top-1/2 left-4 z-10 -translate-y-1/2 text-gray-400 transition group-focus-within:text-blue-500 dark:text-gray-600" />
 
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm Password"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pr-4 pl-11 text-sm text-gray-900 transition outline-none placeholder:text-gray-400 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-gray-600 dark:focus:bg-white/[0.06]"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pr-11 pl-11 text-sm text-gray-900 transition outline-none placeholder:text-gray-400 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-gray-600 dark:focus:bg-white/[0.06]"
                 />
+
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-400 transition hover:text-blue-500 dark:text-gray-600"
+                  aria-label={
+                    showConfirmPassword
+                      ? "Hide confirm password"
+                      : "Show confirm password"
+                  }
+                >
+                  {showConfirmPassword ? (
+                    <FiEyeOff size={18} />
+                  ) : (
+                    <FiEye size={18} />
+                  )}
+                </button>
               </div>
             )}
 
@@ -174,9 +345,14 @@ const Auth = () => {
             {/* Submit */}
             <button
               type="submit"
-              className="w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-500 hover:shadow-blue-600/30 active:scale-[0.98]"
+              disabled={loading}
+              className="w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-500 hover:shadow-blue-600/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isLogin ? "Login to NexDrive" : "Create Account"}
+              {loading
+                ? "Please wait"
+                : isLogin
+                  ? "Login to NexDrive"
+                  : "Create Account"}
             </button>
 
             {/* Divider */}

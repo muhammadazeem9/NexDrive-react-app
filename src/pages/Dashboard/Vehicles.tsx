@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+
 import {
   FiPlus,
   FiSearch,
@@ -8,40 +9,145 @@ import {
 } from "react-icons/fi";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
+
 import AddVehicleModal from "../../components/dashboard/vehicles/AddVehiclesModal";
-import VehicleStatus from "../../components/dashboard/vehicles/VehicleStatus";
-import { vehicles } from "../../data/vehicles";
-import type { Vehicle } from "../../types/vehicle";
+
+import {
+  getAdminVehicles,
+  createVehicle,
+  updateVehicle,
+  deleteVehicle,
+  type Vehicle,
+  type vehiclePayload,
+} from "../../api/admin/adminVehicle.api";
 
 const Vehicles = () => {
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
 
-  const [vehicleList, setVehicleList] = useState<Vehicle[]>(() => {
-    const savedVehicles = localStorage.getItem("vehicles");
-
-    return savedVehicles ? JSON.parse(savedVehicles) : vehicles;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("vehicles", JSON.stringify(vehicleList));
-  }, [vehicleList]);
+  const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
 
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 10;
+
+  // =========================
+  // Fetch vehicles
+  // =========================
+  const fetchVehicles = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const vehicles = await getAdminVehicles();
+
+      setVehicleList(vehicles);
+    } catch (error: any) {
+      setError(error.response?.data?.message || "Unable to load vehicles");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
+
+  // =========================
+  // Search
+  // =========================
   const filteredVehicles = useMemo(() => {
-    return vehicleList.filter((vehicle) => {
-      const matchesSearch =
-        vehicle.name.toLowerCase().includes(search.toLowerCase()) ||
-        vehicle.brand.toLowerCase().includes(search.toLowerCase());
+    const searchValue = search.toLowerCase().trim();
 
-      const matchesStatus =
-        statusFilter === "All" || vehicle.status === statusFilter;
+    if (!searchValue) {
+      return vehicleList;
+    }
 
-      return matchesSearch && matchesStatus;
-    });
-  }, [vehicleList, search, statusFilter]);
+    return vehicleList.filter(
+      (vehicle) =>
+        vehicle.name.toLowerCase().includes(searchValue) ||
+        vehicle.brand.toLowerCase().includes(searchValue) ||
+        vehicle.model.toLowerCase().includes(searchValue),
+    );
+  }, [vehicleList, search]);
+
+  // =========================
+  // Pagination
+  // =========================
+  const totalPages = Math.ceil(filteredVehicles.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  const endIndex = startIndex + itemsPerPage;
+
+  const paginatedVehicles = filteredVehicles.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  // =========================
+  // Add vehicle
+  // =========================
+  const handleAddVehicle = async (vehicleData: vehiclePayload) => {
+    const newVehicle = await createVehicle(vehicleData);
+
+    setVehicleList((prev) => [newVehicle, ...prev]);
+  };
+
+  // =========================
+  // Update vehicle
+  // =========================
+  const handleUpdateVehicle = async (
+    id: string,
+    vehicleData: vehiclePayload,
+  ) => {
+    const updatedVehicle = await updateVehicle(id, vehicleData);
+
+    setVehicleList((currentVehicles) =>
+      currentVehicles.map((vehicle) =>
+        vehicle._id === id ? updatedVehicle : vehicle,
+      ),
+    );
+
+    setEditingVehicle(null);
+  };
+
+  // =========================
+  // Delete vehicle
+  // =========================
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this vehicle?",
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await deleteVehicle(id);
+
+      setVehicleList((currentVehicles) =>
+        currentVehicles.filter((vehicle) => vehicle._id !== id),
+      );
+    } catch (error: any) {
+      alert(error.response?.data?.message || "Unable to delete vehicle");
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -61,7 +167,11 @@ const Vehicles = () => {
           </div>
 
           <button
-            onClick={() => setIsModalOpen(true)}
+            type="button"
+            onClick={() => {
+              setEditingVehicle(null);
+              setIsModalOpen(true);
+            }}
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-400"
           >
             <FiPlus size={18} />
@@ -69,40 +179,25 @@ const Vehicles = () => {
           </button>
         </section>
 
-        {/* Filters */}
+        {/* Error */}
+        {error && (
+          <div className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-400">
+            {error}
+          </div>
+        )}
+
+        {/* Search */}
         <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <div className="flex flex-col gap-3 md:flex-row">
-            {/* Search */}
-            <div className="flex flex-1 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4">
-              <FiSearch size={18} className="shrink-0 text-slate-500" />
+          <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4">
+            <FiSearch size={18} className="shrink-0 text-slate-500" />
 
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search vehicles..."
-                className="w-full bg-transparent py-3 text-sm text-white outline-none placeholder:text-slate-600"
-              />
-            </div>
-
-            {/* Status */}
-            <div className="relative">
-              <FiMoreHorizontal
-                size={17}
-                className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-slate-500"
-              />
-
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full appearance-none rounded-xl border border-white/10 bg-[#0b1627] py-3 pr-10 pl-10 text-sm text-slate-300 outline-none md:w-48"
-              >
-                <option value="All">All Status</option>
-                <option value="Available">Available</option>
-                <option value="Booked">Booked</option>
-                <option value="Maintenance">Maintenance</option>
-              </select>
-            </div>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search vehicles..."
+              className="w-full bg-transparent py-3 text-sm text-white outline-none placeholder:text-slate-600"
+            />
           </div>
         </section>
 
@@ -117,19 +212,15 @@ const Vehicles = () => {
                   </th>
 
                   <th className="px-6 py-4 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">
-                    Category
+                    Model
+                  </th>
+
+                  <th className="px-6 py-4 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">
+                    Year
                   </th>
 
                   <th className="px-6 py-4 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">
                     Price
-                  </th>
-
-                  <th className="px-6 py-4 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">
-                    Bookings
-                  </th>
-
-                  <th className="px-6 py-4 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">
-                    Status
                   </th>
 
                   <th className="px-6 py-4 text-right text-xs font-medium tracking-wider text-slate-500 uppercase">
@@ -139,150 +230,186 @@ const Vehicles = () => {
               </thead>
 
               <tbody>
-                {filteredVehicles.map((vehicle) => (
-                  <tr
-                    key={vehicle.id}
-                    className="border-b border-white/5 transition hover:bg-white/[0.02]"
-                  >
-                    {/* Vehicle */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4">
-                        <img
-                          src={vehicle.image}
-                          alt={vehicle.name}
-                          className="h-14 w-20 rounded-lg object-cover"
-                        />
-
+                {/* Loading */}
+                {loading ? (
+                  <tr>
+                    <td
+                      colSpan={5}
+                      className="px-6 py-12 text-center text-sm text-slate-500"
+                    >
+                      Loading vehicles...
+                    </td>
+                  </tr>
+                ) : filteredVehicles.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={5}
+                      className="px-6 py-12 text-center text-sm text-slate-500"
+                    >
+                      No vehicles found.
+                    </td>
+                  </tr>
+                ) : (
+                  paginatedVehicles.map((vehicle) => (
+                    <tr
+                      key={vehicle._id}
+                      className="border-b border-white/5 transition hover:bg-white/[0.02]"
+                    >
+                      {/* Vehicle */}
+                      <td className="px-6 py-4">
                         <div>
                           <p className="font-medium text-white">
                             {vehicle.name}
                           </p>
 
                           <p className="mt-1 text-xs text-slate-500">
-                            {vehicle.brand} · {vehicle.id}
+                            {vehicle.brand} · {vehicle._id}
                           </p>
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Category */}
-                    <td className="px-6 py-4 text-sm text-slate-400">
-                      {vehicle.category}
-                    </td>
+                      {/* Model */}
+                      <td className="px-6 py-4 text-sm text-slate-400">
+                        {vehicle.model}
+                      </td>
 
-                    {/* Price */}
-                    <td className="px-6 py-4">
-                      <span className="text-sm font-semibold text-white">
-                        ${vehicle.pricePerDay}
-                      </span>
+                      {/* Year */}
+                      <td className="px-6 py-4 text-sm text-slate-400">
+                        {vehicle.year}
+                      </td>
 
-                      <span className="text-xs text-slate-600">/day</span>
-                    </td>
+                      {/* Price */}
+                      <td className="px-6 py-4">
+                        <span className="text-sm font-semibold text-white">
+                          ${vehicle.pricePerDay}
+                        </span>
 
-                    {/* Bookings */}
-                    <td className="px-6 py-4 text-sm text-slate-400">
-                      {vehicle.bookings}
-                    </td>
+                        <span className="text-xs text-slate-600">/day</span>
+                      </td>
 
-                    {/* Status */}
-                    <td className="px-6 py-4">
-                      <VehicleStatus status={vehicle.status} />
-                    </td>
+                      {/* Actions */}
+                      <td className="px-6 py-4">
+                        <div className="flex justify-end gap-1">
+                          {/* Edit */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingVehicle(vehicle);
 
-                    {/* Actions */}
-                    <td className="px-6 py-4">
-                      <div className="flex justify-end gap-1">
-                        <button
-                          onClick={() => {
-                            setEditingVehicle(vehicle);
-                            setIsModalOpen(true);
-                          }}
-                          className="rounded-lg p-2 text-slate-500 transition hover:bg-sky-400/10 hover:text-sky-400"
-                        >
-                          <FiEdit size={16} />
-                        </button>
+                              setIsModalOpen(true);
+                            }}
+                            className="rounded-lg p-2 text-slate-500 transition hover:bg-sky-400/10 hover:text-sky-400"
+                          >
+                            <FiEdit size={16} />
+                          </button>
 
-                        <button
-                          onClick={() =>
-                            setVehicleList((currentVehicles) =>
-                              currentVehicles.filter(
-                                (item) => item.id !== vehicle.id,
-                              ),
-                            )
-                          }
-                          className="rounded-lg p-2 text-slate-500 transition hover:bg-red-400/10 hover:text-red-400"
-                        >
-                          <FiTrash2 size={16} />
-                        </button>
+                          {/* Delete */}
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(vehicle._id)}
+                            className="rounded-lg p-2 text-slate-500 transition hover:bg-red-400/10 hover:text-red-400"
+                          >
+                            <FiTrash2 size={16} />
+                          </button>
 
-                        <button className="rounded-lg p-2 text-slate-500 transition hover:bg-white/5 hover:text-white">
-                          <FiMoreHorizontal size={16} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                          {/* More */}
+                          <button
+                            type="button"
+                            className="rounded-lg p-2 text-slate-500 transition hover:bg-white/5 hover:text-white"
+                          >
+                            <FiMoreHorizontal size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
 
-          {/* Empty state */}
-          {filteredVehicles.length === 0 && (
-            <div className="flex min-h-40 items-center justify-center">
-              <p className="text-sm text-slate-500">No vehicles found.</p>
-            </div>
-          )}
-
           {/* Footer */}
-          <div className="flex items-center justify-between border-t border-white/5 px-6 py-4">
-            <p className="text-xs text-slate-500">
-              Showing {filteredVehicles.length} of {vehicles.length} vehicles
+          <div className="flex flex-col gap-4 border-t border-[var(--border)] px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+            {/* Results */}
+            <p className="text-sm text-[var(--muted)]">
+              Showing{" "}
+              <span className="font-medium text-[var(--foreground)]">
+                {filteredVehicles.length === 0 ? 0 : startIndex + 1}
+              </span>{" "}
+              to{" "}
+              <span className="font-medium text-[var(--foreground)]">
+                {Math.min(endIndex, filteredVehicles.length)}
+              </span>{" "}
+              of{" "}
+              <span className="font-medium text-[var(--foreground)]">
+                {filteredVehicles.length}
+              </span>{" "}
+              vehicles
             </p>
 
-            <div className="flex gap-2">
-              <button
-                disabled
-                className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-slate-600"
-              >
-                Previous
-              </button>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center gap-1">
+                {/* Previous */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setCurrentPage((page) => Math.max(page - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="rounded-lg border border-[var(--border)] px-3 py-2 text-sm text-[var(--foreground)] transition hover:bg-[var(--background)] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Previous
+                </button>
 
-              <button className="rounded-lg bg-sky-500 px-3 py-1.5 text-xs font-medium text-white">
-                1
-              </button>
+                {/* Page numbers */}
+                {Array.from(
+                  {
+                    length: totalPages,
+                  },
+                  (_, index) => index + 1,
+                ).map((page) => (
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={() => setCurrentPage(page)}
+                    className={`h-9 min-w-9 rounded-lg px-3 text-sm font-medium transition ${
+                      currentPage === page
+                        ? "bg-sky-500 text-white"
+                        : "text-[var(--foreground)] hover:bg-[var(--background)]"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
 
-              <button className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-slate-400 hover:text-white">
-                2
-              </button>
-
-              <button className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-slate-400 hover:text-white">
-                Next
-              </button>
-            </div>
+                {/* Next */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setCurrentPage((page) => Math.min(page + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="rounded-lg border border-[var(--border)] px-3 py-2 text-sm text-[var(--foreground)] transition hover:bg-[var(--background)] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </section>
       </div>
 
+      {/* Add / Edit Modal */}
       <AddVehicleModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
           setEditingVehicle(null);
         }}
-        onAdd={(newVehicle) => {
-          setVehicleList((prev) => [newVehicle, ...prev]);
-        }}
         editingVehicle={editingVehicle}
-        onUpdate={(updatedVehicle) => {
-          setVehicleList((currentVehicles) =>
-            currentVehicles.map((vehicle) =>
-              vehicle.id === updatedVehicle.id ? updatedVehicle : vehicle,
-            ),
-          );
-
-          setIsModalOpen(false);
-          setEditingVehicle(null);
-        }}
+        onAdd={handleAddVehicle}
+        onUpdate={handleUpdateVehicle}
       />
     </DashboardLayout>
   );
