@@ -32,7 +32,7 @@ const Settings = () => {
     role: "admin",
   });
 
-  const [profileLoading, setProfileLoading] = useState(true);
+  const [, setProfileLoading] = useState(true);
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileMessage, setProfileMessage] = useState("");
   const [profileError, setProfileError] = useState("");

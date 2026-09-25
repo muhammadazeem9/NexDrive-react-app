@@ -11,13 +11,43 @@ import {
   getPopularVehicles,
 } from "../../api/admin/admin.api";
 import type { RevenueItem } from "../../api/admin/admin.api";
-import type { PopularVehicle } from "../../types/dashboard";
-import { dashboardStats } from "../../data/dashboard";
+import type { DashboardResponse, PopularVehicle } from "../../types/dashboard";
 import { Link } from "react-router-dom";
+
+const statCards = [
+  {
+    title: "Total Revenue",
+    change: "",
+    description: "Total revenue generated",
+    icon: "revenue" as const,
+    positive: true,
+  },
+  {
+    title: "Total Bookings",
+    change: "",
+    description: "Total bookings",
+    icon: "bookings" as const,
+    positive: true,
+  },
+  {
+    title: "Total Vehicles",
+    change: "",
+    description: "Vehicles in your fleet",
+    icon: "vehicles" as const,
+    positive: true,
+  },
+  {
+    title: "Total Customers",
+    change: "",
+    description: "Registered customers",
+    icon: "customers" as const,
+    positive: true,
+  },
+];
 
 const Dashboard = () => {
   // for dashboard statas
-  const [dashboard, setDashboard] = useState<any>(null);
+  const [dashboard, setDashboard] = useState<DashboardResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -139,7 +169,7 @@ const Dashboard = () => {
 
         {/* Statistics */}
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {dashboardStats.map((stat, index) => {
+          {statCards.map((stat, index) => {
             const values = [
               `$ ${(stats?.totalRevenue ?? 0).toLocaleString()}`,
               stats?.totalBookings ?? 0,
@@ -152,7 +182,7 @@ const Dashboard = () => {
                 key={stat.title}
                 data={{
                   ...stat,
-                  value: values[index],
+                  value: String(values[index]),
                 }}
               />
             );

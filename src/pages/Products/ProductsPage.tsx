@@ -8,7 +8,7 @@ import ProductToolbar from "./components/ProductToolbar";
 const ProductsPage = () => {
   const [search, setSearch] = useState("");
 
-  const [category, setCategory] = useState<string[]>([]);
+  // const [category, setCategory] = useState<string[]>([]);
   const [brand, setBrand] = useState<string[]>([]);
   const [price, setPrice] = useState<number[]>([]);
   const [rating, setRating] = useState<number | null>(null);

@@ -6,14 +6,13 @@ import {
   FaHeart,
   FaMinus,
   FaPlus,
-  FaShoppingCart,
   FaShieldAlt,
   FaTools,
   FaTruck,
 } from "react-icons/fa";
 
 import ProductSection from "../../components/ProductSection/ProductSection";
-import { useCart } from "../../context/CartContext";
+// import { useCart } from "../../context/CartContext";
 
 import { getVehicleById } from "../../api/vehicle.api";
 import { carImage } from "../Products/utils/carImage";
@@ -24,7 +23,7 @@ import { useAuth } from "../../context/AuthContext";
 const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
 
   const [product, setProduct] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
