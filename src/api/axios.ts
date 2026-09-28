@@ -11,13 +11,13 @@ interface FailedRequest {
 }
 
 const api = axios.create({
-  baseURL: import.meta.env.API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
-console.log("API URL:", import.meta.env.API_URL);
+console.log("API URL:", import.meta.env.VITE_API_URL);
 
 let isRefreshing = false;
 
