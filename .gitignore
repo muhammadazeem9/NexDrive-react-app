@@ -10,8 +10,8 @@ lerna-debug.log*
 
 # Environment variables
 .env
-.env.*
-!.env.example
+.env.local
+.env.production
 
 node_modules
 dist
